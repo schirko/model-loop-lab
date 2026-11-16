@@ -1,0 +1,12 @@
+# Analysis (milestones 1-4)
+pandas
+numpy
+scikit-learn
+optuna
+matplotlib
+
+# Notebooks in PyCharm
+ipykernel
+
+# Tests
+pytest

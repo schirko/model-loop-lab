@@ -1,0 +1,713 @@
+{
+ "sample": true,
+ "dataset": "Forest Covertype (sample of 20,000 rows)",
+ "metric": "Accuracy on held-out test data",
+ "baseline": {
+  "label": "Default decision tree",
+  "score": 0.781
+ },
+ "population": 10,
+ "keep": 3,
+ "generations": [
+  {
+   "gen": 1,
+   "best": 0.795,
+   "median": 0.7619,
+   "worst": 0.6669,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 12,
+      "min_samples_leaf": 3
+     },
+     "score": 0.795
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 12,
+      "min_samples_leaf": 1
+     },
+     "score": 0.7913
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 12,
+      "min_samples_leaf": 4
+     },
+     "score": 0.7905
+    }
+   ]
+  },
+  {
+   "gen": 2,
+   "best": 0.802,
+   "median": 0.7485,
+   "worst": 0.6582,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 28,
+      "min_samples_leaf": 4
+     },
+     "score": 0.802
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 28,
+      "min_samples_leaf": 2
+     },
+     "score": 0.7989
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 12,
+      "min_samples_leaf": 3
+     },
+     "score": 0.7936
+    }
+   ]
+  },
+  {
+   "gen": 3,
+   "best": 0.8098,
+   "median": 0.7808,
+   "worst": 0.697,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 12,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8098
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 24,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8046
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 24,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8034
+    }
+   ]
+  },
+  {
+   "gen": 4,
+   "best": 0.818,
+   "median": 0.7756,
+   "worst": 0.7098,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 28,
+      "min_samples_leaf": 4
+     },
+     "score": 0.818
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 20,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8156
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 20,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8066
+    }
+   ]
+  },
+  {
+   "gen": 5,
+   "best": 0.823,
+   "median": 0.7764,
+   "worst": 0.7206,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 20,
+      "min_samples_leaf": 3
+     },
+     "score": 0.823
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 28,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8207
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 24,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8185
+    }
+   ]
+  },
+  {
+   "gen": 6,
+   "best": 0.8297,
+   "median": 0.7927,
+   "worst": 0.7029,
+   "top": [
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": "None",
+      "min_samples_leaf": 4
+     },
+     "score": 0.8297
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 24,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8271
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 12,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8196
+    }
+   ]
+  },
+  {
+   "gen": 7,
+   "best": 0.8321,
+   "median": 0.8055,
+   "worst": 0.7432,
+   "top": [
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 16,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8321
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 24,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8272
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 16,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8274
+    }
+   ]
+  },
+  {
+   "gen": 8,
+   "best": 0.8344,
+   "median": 0.8012,
+   "worst": 0.7558,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 20,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8344
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 20,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8286
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 28,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8267
+    }
+   ]
+  },
+  {
+   "gen": 9,
+   "best": 0.8411,
+   "median": 0.8045,
+   "worst": 0.7389,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 24,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8411
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 12,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8388
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 16,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8344
+    }
+   ]
+  },
+  {
+   "gen": 10,
+   "best": 0.8426,
+   "median": 0.8251,
+   "worst": 0.7802,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 28,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8426
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 24,
+      "min_samples_leaf": 2
+     },
+     "score": 0.838
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 20,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8376
+    }
+   ]
+  },
+  {
+   "gen": 11,
+   "best": 0.8482,
+   "median": 0.8159,
+   "worst": 0.7644,
+   "top": [
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 12,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8482
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 24,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8442
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 20,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8387
+    }
+   ]
+  },
+  {
+   "gen": 12,
+   "best": 0.8538,
+   "median": 0.8274,
+   "worst": 0.7841,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": "None",
+      "min_samples_leaf": 3
+     },
+     "score": 0.8538
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 16,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8493
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 16,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8439
+    }
+   ]
+  },
+  {
+   "gen": 13,
+   "best": 0.8558,
+   "median": 0.8349,
+   "worst": 0.7932,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 20,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8558
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 20,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8505
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 300,
+      "max_depth": 20,
+      "min_samples_leaf": 1
+     },
+     "score": 0.85
+    }
+   ]
+  },
+  {
+   "gen": 14,
+   "best": 0.8576,
+   "median": 0.8426,
+   "worst": 0.8077,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 12,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8576
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": "None",
+      "min_samples_leaf": 1
+     },
+     "score": 0.8519
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 24,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8501
+    }
+   ]
+  },
+  {
+   "gen": 15,
+   "best": 0.8607,
+   "median": 0.8485,
+   "worst": 0.8001,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 24,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8607
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 16,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8586
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": "None",
+      "min_samples_leaf": 2
+     },
+     "score": 0.8518
+    }
+   ]
+  },
+  {
+   "gen": 16,
+   "best": 0.8633,
+   "median": 0.8486,
+   "worst": 0.8048,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 28,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8633
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 28,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8596
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 12,
+      "min_samples_leaf": 3
+     },
+     "score": 0.8576
+    }
+   ]
+  },
+  {
+   "gen": 17,
+   "best": 0.8654,
+   "median": 0.85,
+   "worst": 0.8216,
+   "top": [
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 16,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8654
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": "None",
+      "min_samples_leaf": 4
+     },
+     "score": 0.8601
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 28,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8572
+    }
+   ]
+  },
+  {
+   "gen": 18,
+   "best": 0.8659,
+   "median": 0.8551,
+   "worst": 0.8322,
+   "top": [
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 200,
+      "max_depth": 16,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8659
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 28,
+      "min_samples_leaf": 1
+     },
+     "score": 0.8626
+    },
+    {
+     "model": "Gradient boosting",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 28,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8557
+    }
+   ]
+  },
+  {
+   "gen": 19,
+   "best": 0.8666,
+   "median": 0.8568,
+   "worst": 0.8358,
+   "top": [
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 100,
+      "max_depth": 12,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8666
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 20,
+      "min_samples_leaf": 2
+     },
+     "score": 0.8618
+    },
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 28,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8585
+    }
+   ]
+  },
+  {
+   "gen": 20,
+   "best": 0.8673,
+   "median": 0.8597,
+   "worst": 0.8342,
+   "top": [
+    {
+     "model": "Extra trees",
+     "params": {
+      "n_estimators": 500,
+      "max_depth": 16,
+      "min_samples_leaf": 4
+     },
+     "score": 0.8673
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 24,
+      "min_samples_leaf": 3
+     },
+     "score": 0.865
+    },
+    {
+     "model": "Random forest",
+     "params": {
+      "n_estimators": 400,
+      "max_depth": 12,
+      "min_samples_leaf": 2
+     },
+     "score": 0.858
+    }
+   ]
+  }
+ ]
+}

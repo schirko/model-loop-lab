@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local settings (copy .env.example to .env)
+.env
+
+# PyCharm
+.idea/
+
+# Downloaded or large data stays out of Git
+data/*
+!data/.gitkeep

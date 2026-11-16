@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Where loops break - Model Loop Lab</title>
+<meta name="description" content="Models trained only on earlier models' made-up data lose variety and accuracy on real forest plots.">
+<link rel="stylesheet" href="/scott/backbar.css">
+<link rel="icon" href="/scott/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="16x16" href="/scott/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/scott/favicon-32.png">
+<link rel="apple-touch-icon" href="/scott/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/scott/model-loop-lab/assets/site.css">
+</head>
+<body>
+<div class="sx-backbar">
+  <a class="sx-back" href="/scott/">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="sx-crumb">Model Loop Lab</span>
+  <span class="sx-links"><a href="/scott/model-loop-lab/notebooks/">Notebooks</a><a href="https://github.com/schirko/model-loop-lab">Code</a></span>
+</div>
+
+<nav class="mll-nav" aria-label="Project">
+  <div class="mll-wrap">
+    <a class="mll-brand" href="/scott/model-loop-lab/">Model Loop Lab</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/">Overview</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/loop/">The loop works</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/collapse/" aria-current="page">Where loops break</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/notebooks/">Notebooks</a>
+  </div>
+</nav>
+
+<main class="mll-wrap">
+  <section class="mll-hero">
+    <h1>Where loops break</h1>
+    <p class="mll-lede">Some AI models are now trained partly on text and data written by earlier models. This experiment shrinks that idea down to forest data: each generation learns only from what the previous generation made up, never from the real plots again.</p>
+    <ol class="mll-steps">
+      <li><strong>Learn</strong><span>A generator model learns the shape of the forest data.</span></li>
+      <li><strong>Make up data</strong><span>It writes 20,000 new, synthetic forest plots.</span></li>
+      <li><strong>Test</strong><span>A classifier trains on those synthetic plots and is scored on real ones it never saw.</span></li>
+      <li><strong>Hand off</strong><span>The next generator learns from the synthetic plots only.</span></li>
+    </ol>
+    <p class="mll-repeat">Then back to step 1, for 10 generations. Generation 0 learns from the real data, every later one from the one before it.</p>
+  </section>
+
+  <section>
+    <div class="mll-chart-head">
+      <h2>How well do later generations know the real forest?</h2>
+      <span class="mll-pending" data-sample-for="collapse" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Sample data</span>
+    </div>
+    <div class="mll-chart" id="chart-accuracy" role="img" aria-label="Line chart of accuracy on real forest plots for each generation"></div>
+    <p class="mll-chart-caption" id="cap-accuracy">Accuracy on real held-out plots, by generation.</p>
+    <div class="mll-notes">
+      <div><h3>What we're looking for</h3><p>Whether learning from made-up data costs anything, and how quickly the cost adds up from one generation to the next.</p></div>
+      <div><h3>How to read it</h3><p>Generation 0 trained on synthetic data copied from the real forest. Each later point is one more copy of a copy. A falling line means each copy knows the real forest less well.</p></div>
+      <div><h3>What it means</h3><p class="mll-wait">Written from the real run in milestone 4.</p></div>
+      <div><h3>What's next and why</h3><p>Accuracy shows that something is lost. The next chart shows what is lost: the variety in the data.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mll-chart-head">
+      <h2>What is being lost?</h2>
+      <span class="mll-pending" data-sample-for="collapse" hidden>Sample data</span>
+    </div>
+    <div class="mll-chart" id="chart-diversity" role="img" aria-label="Line chart of how much variety remains in the data each generation"></div>
+    <p class="mll-chart-caption">Variety left in the synthetic data, as a share of the real data's spread. 100% means as varied as the real forest.</p>
+    <div class="mll-notes">
+      <div><h3>What we're looking for</h3><p>Whether the made-up data drifts toward the average and drops the unusual plots: rare tree covers, very high or very low ground.</p></div>
+      <div><h3>How to read it</h3><p>The line tracks the spread of the features, averaged across them. A drop from 100% toward 0% means every plot is starting to look the same.</p></div>
+      <div><h3>What it means</h3><p class="mll-wait">Written from the real run in milestone 4.</p></div>
+      <div><h3>What's next and why</h3><p>A single number hides how the data changes, so the chart below shows one feature, elevation, before and after.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Elevation, generation by generation</h2>
+    <p>Elevation is the strongest clue to which trees grow on a plot. Slide to watch its range narrow as the copies pile up.</p>
+    <div class="mll-control">
+      <label for="col-pick">Compare real data with generation</label>
+      <input type="range" id="col-pick" min="1" max="10" value="10">
+      <output id="col-out" for="col-pick">10</output>
+      <span class="mll-pending" data-sample-for="collapse" hidden>Sample data</span>
+    </div>
+    <div class="mll-chart" id="chart-elevation" role="img" aria-label="Bar chart comparing the elevation spread of the real data with a chosen generation"></div>
+    <p class="mll-chart-caption">Number of plots in each 100-meter elevation band.</p>
+  </section>
+
+  <section class="mll-pager">
+    <a href="/scott/model-loop-lab/loop/">Back: the loop works</a>
+    <a href="/scott/model-loop-lab/notebooks/">Next: the notebooks</a>
+  </section>
+</main>
+
+<footer class="mll-foot">
+  <div class="mll-wrap">
+    <p>Model Loop Lab by Scott Schirkofsky. Part of my <a href="/scott/">project portfolio</a>.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly-basic.min.js"></script>
+<script src="/scott/model-loop-lab/assets/charts.js"></script>
+<script>
+(async function () {
+  let col;
+  try { col = await MLL.load("collapse"); MLL.markSample("collapse", col.sample); }
+  catch (e) { ["chart-accuracy", "chart-diversity", "chart-elevation"].forEach((id) => MLL.showError(document.getElementById(id), e)); return; }
+
+  const G = col.generations;
+  const gens = G.map((d) => d.gen);
+  const last = gens[gens.length - 1];
+
+  function single(id, y, name, yTitle, fmt, endText) {
+    const c = MLL.css("--series-1");
+    MLL.draw(id, [{
+      x: gens, y: y, name: name, mode: "lines+markers",
+      line: { width: 2, color: c },
+      marker: { size: 8, color: c, line: { width: 2, color: MLL.css("--surface-raised") } },
+      hovertemplate: "Generation %{x}: %{y:" + fmt + "}<extra></extra>",
+    }], MLL.layout({
+      hovermode: "closest", showlegend: false,
+      xaxis: { title: { text: "Generation" }, tickvals: gens, range: [-0.5, last + 1.6] },
+      yaxis: { title: { text: yTitle }, tickformat: fmt.replace(".1", ".0"), rangemode: "tozero" },
+      annotations: [{ x: last, y: y[y.length - 1], text: endText, xanchor: "left", xshift: 10, showarrow: false, font: { color: MLL.css("--ink-2") } }],
+    }));
+  }
+
+  function drawAccuracy() {
+    const y = G.map((d) => d.real_test_accuracy);
+    single("chart-accuracy", y, "Accuracy", "Accuracy on real plots", ".1%", MLL.pct(y[y.length - 1]));
+    document.getElementById("cap-accuracy").textContent =
+      "Accuracy on real held-out plots, by generation. It goes from " + MLL.pct(y[0]) + " at generation 0 to " +
+      MLL.pct(y[y.length - 1]) + " at generation " + last + ".";
+  }
+  function drawDiversity() {
+    const y = G.map((d) => d.diversity);
+    single("chart-diversity", y, "Variety", "Variety left", ".1%", MLL.pct(y[y.length - 1], 0));
+  }
+  function drawElevation(n) {
+    const real = G[0], pick = G.find((d) => d.gen === n) || G[G.length - 1];
+    document.getElementById("col-out").textContent = pick.gen;
+    const x = real.elevation_hist.bins.map((b) => b + 50);
+    const bar = (d, name, v) => ({
+      x: x, y: d.elevation_hist.counts, name: name, type: "bar",
+      marker: { color: MLL.css(v), line: { width: 0 } },
+      hovertemplate: "%{x} m: %{y} plots<extra>" + name + "</extra>",
+    });
+    MLL.draw("chart-elevation",
+      [bar(real, "Real data", "--series-1"), bar(pick, "Generation " + pick.gen, "--series-2")],
+      MLL.layout({
+        barmode: "group", bargap: 0.18, bargroupgap: 0.08, hovermode: "closest",
+        xaxis: { title: { text: "Elevation (meters)" } },
+        yaxis: { title: { text: "Plots" } },
+      }));
+  }
+
+  const pick = document.getElementById("col-pick");
+  pick.max = last; pick.value = last;
+  pick.addEventListener("input", () => drawElevation(Number(pick.value)));
+
+  drawAccuracy(); drawDiversity(); drawElevation(last);
+  MLL.onTheme(() => { drawAccuracy(); drawDiversity(); drawElevation(Number(pick.value)); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The loop works - Model Loop Lab</title>
+<meta name="description" content="An evolutionary search finds better forest-cover models over 20 generations, raced against Optuna and random guessing.">
+<link rel="stylesheet" href="/scott/backbar.css">
+<link rel="icon" href="/scott/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="16x16" href="/scott/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/scott/favicon-32.png">
+<link rel="apple-touch-icon" href="/scott/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/scott/model-loop-lab/assets/site.css">
+</head>
+<body>
+<div class="sx-backbar">
+  <a class="sx-back" href="/scott/">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="sx-crumb">Model Loop Lab</span>
+  <span class="sx-links"><a href="/scott/model-loop-lab/notebooks/">Notebooks</a><a href="https://github.com/schirko/model-loop-lab">Code</a></span>
+</div>
+
+<nav class="mll-nav" aria-label="Project">
+  <div class="mll-wrap">
+    <a class="mll-brand" href="/scott/model-loop-lab/">Model Loop Lab</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/">Overview</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/loop/" aria-current="page">The loop works</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/collapse/">Where loops break</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/notebooks/">Notebooks</a>
+  </div>
+</nav>
+
+<main class="mll-wrap">
+  <section class="mll-hero">
+    <h1>The loop works</h1>
+    <p class="mll-lede">A small evolutionary search hunts for better forest-cover models. Each generation it builds ten candidate models, scores them on plots they never saw, keeps the top three and makes new candidates by changing their settings a little.</p>
+    <ol class="mll-steps">
+      <li><strong>Build</strong><span>Ten models with different settings: model type, number of trees, tree depth, leaf size.</span></li>
+      <li><strong>Score</strong><span>Each one predicts forest cover on held-out plots. Accuracy is the score.</span></li>
+      <li><strong>Keep</strong><span>The three best survive. The other seven are dropped.</span></li>
+      <li><strong>Change</strong><span>The survivors are copied with small random changes to make the next ten.</span></li>
+    </ol>
+    <p class="mll-repeat">Then back to step 1, for 20 generations. No person picks the settings along the way.</p>
+  </section>
+
+  <section>
+    <div class="mll-chart-head">
+      <h2>Does each generation get better?</h2>
+      <span class="mll-pending" data-sample-for="evolution" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Sample data</span>
+    </div>
+    <div class="mll-chart" id="chart-generations" role="img" aria-label="Line chart of best and median accuracy per generation against the starting model"></div>
+    <p class="mll-chart-caption" id="cap-generations">Accuracy on held-out plots, generations 1 to 20.</p>
+    <div class="mll-notes">
+      <div><h3>What we're looking for</h3><p>Whether the loop finds better models on its own, and whether the gains keep coming or level off.</p></div>
+      <div><h3>How to read it</h3><p>Each point is one generation. The top line is that generation's best model and the middle line is its typical (median) model. The dashed line is the plain decision tree everything is compared against.</p></div>
+      <div><h3>What it means</h3><p class="mll-wait">Written from the real run in milestone 3.</p></div>
+      <div><h3>What's next and why</h3><p>A loop that improves is only interesting if it beats simpler options, so the next chart races it against a standard tuning library and random guessing.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mll-chart-head">
+      <h2>Is the loop better than guessing?</h2>
+      <span class="mll-pending" data-sample-for="search_compare" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Sample data</span>
+    </div>
+    <div class="mll-chart" id="chart-compare" role="img" aria-label="Line chart of best accuracy found so far by three search methods over 200 models tried"></div>
+    <p class="mll-chart-caption">Best accuracy found so far, after each model tried. All three methods get the same budget of 200 models.</p>
+    <div class="mll-notes">
+      <div><h3>What we're looking for</h3><p>Which method finds a good model with the fewest tries. Trying models costs time and computing power, so getting there sooner matters.</p></div>
+      <div><h3>How to read it</h3><p>Lines only go up or stay flat, because each shows the best result found so far. A line that climbs earlier found good settings faster. Where the lines end shows how good each method's final pick was.</p></div>
+      <div><h3>What it means</h3><p class="mll-wait">Written from the real run in milestone 3.</p></div>
+      <div><h3>What's next and why</h3><p>The table below opens up any generation to show which settings were winning, which explains why the scores moved.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Inside a generation</h2>
+    <p>Pick a generation to see the three settings that survived it.</p>
+    <div class="mll-control">
+      <label for="gen-pick">Generation</label>
+      <input type="range" id="gen-pick" min="1" max="20" value="20">
+      <output id="gen-out" for="gen-pick">20</output>
+      <span class="mll-pending" data-sample-for="evolution" hidden>Sample data</span>
+    </div>
+    <div class="mll-table-wrap">
+      <table class="mll-table">
+        <thead><tr><th>Rank</th><th>Model</th><th class="num">Trees</th><th class="num">Max depth</th><th class="num">Min leaf size</th><th class="num">Accuracy</th></tr></thead>
+        <tbody id="gen-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mll-pager">
+    <a href="/scott/model-loop-lab/">Back to the overview</a>
+    <a href="/scott/model-loop-lab/collapse/">Next: where loops break</a>
+  </section>
+</main>
+
+<footer class="mll-foot">
+  <div class="mll-wrap">
+    <p>Model Loop Lab by Scott Schirkofsky. Part of my <a href="/scott/">project portfolio</a>.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly-basic.min.js"></script>
+<script src="/scott/model-loop-lab/assets/charts.js"></script>
+<script>
+(async function () {
+  let evo, cmp;
+  try { evo = await MLL.load("evolution"); MLL.markSample("evolution", evo.sample); }
+  catch (e) { MLL.showError(document.getElementById("chart-generations"), e); }
+  try { cmp = await MLL.load("search_compare"); MLL.markSample("search_compare", cmp.sample); }
+  catch (e) { MLL.showError(document.getElementById("chart-compare"), e); }
+
+  function drawGenerations() {
+    if (!evo) return;
+    const g = evo.generations.map((d) => d.gen);
+    const last = g[g.length - 1];
+    const best = evo.generations.map((d) => d.best);
+    const med = evo.generations.map((d) => d.median);
+    const line = (w, c, dash) => ({ width: w, color: c, dash: dash || "solid" });
+    const traces = [
+      { x: g, y: best, name: "Best model", mode: "lines+markers", line: line(2, MLL.css("--series-1")), marker: { size: 8, color: MLL.css("--series-1"), line: { width: 2, color: MLL.css("--surface-raised") } }, hovertemplate: "%{y:.1%}" },
+      { x: g, y: med, name: "Median model", mode: "lines+markers", line: line(2, MLL.css("--series-2")), marker: { size: 8, color: MLL.css("--series-2"), line: { width: 2, color: MLL.css("--surface-raised") } }, hovertemplate: "%{y:.1%}" },
+      { x: [1, last], y: [evo.baseline.score, evo.baseline.score], name: evo.baseline.label, mode: "lines", line: line(2, MLL.css("--baseline"), "dash"), hovertemplate: "%{y:.1%}" },
+    ];
+    const ink = MLL.css("--ink-2");
+    const layout = MLL.layout({
+      xaxis: { title: { text: "Generation" }, tickvals: g.filter((n) => n % 2 === 0), range: [0.5, last + 2.6] },
+      yaxis: { title: { text: "Accuracy on held-out plots" }, tickformat: ".0%" },
+      showlegend: true,
+      annotations: [
+        { x: last, y: best[best.length - 1], text: "Best", xanchor: "left", xshift: 10, showarrow: false, font: { color: ink } },
+        { x: last, y: med[med.length - 1], text: "Median", xanchor: "left", xshift: 10, showarrow: false, font: { color: ink } },
+        { x: last, y: evo.baseline.score, text: "Starting model", xanchor: "left", xshift: 10, showarrow: false, font: { color: ink } },
+      ],
+    });
+    MLL.draw("chart-generations", traces, layout);
+    const gain = best[best.length - 1] - evo.baseline.score;
+    document.getElementById("cap-generations").textContent =
+      "Accuracy on held-out plots, generations 1 to " + last + ". The best model ends " +
+      (gain * 100).toFixed(1) + " points above the starting decision tree.";
+  }
+
+  function drawCompare() {
+    if (!cmp) return;
+    const t = cmp.evolution.map((_, i) => i + 1);
+    const series = [
+      ["Evolution loop", cmp.evolution, "--series-1"],
+      ["Optuna", cmp.optuna, "--series-2"],
+      ["Random guessing", cmp.random, "--series-3"],
+    ];
+    const traces = series.map(([name, y, v]) => ({ x: t, y: y, name: name, mode: "lines", line: { width: 2, color: MLL.css(v), shape: "hv" }, hovertemplate: "%{y:.1%}" }));
+    const layout = MLL.layout({
+      xaxis: { title: { text: "Models tried" }, range: [0, t.length + 4] },
+      yaxis: { title: { text: "Best accuracy so far" }, tickformat: ".0%" },
+    });
+    MLL.draw("chart-compare", traces, layout);
+  }
+
+  function fillTable(n) {
+    if (!evo) return;
+    const gen = evo.generations.find((d) => d.gen === n) || evo.generations[evo.generations.length - 1];
+    document.getElementById("gen-out").textContent = gen.gen;
+    document.getElementById("gen-table").innerHTML = gen.top.map((m, i) =>
+      "<tr><td>" + (i + 1) + "</td><td>" + m.model + "</td><td class=num>" + m.params.n_estimators +
+      "</td><td class=num>" + m.params.max_depth + "</td><td class=num>" + m.params.min_samples_leaf +
+      "</td><td class=num>" + MLL.pct(m.score) + "</td></tr>").join("");
+  }
+
+  const pick = document.getElementById("gen-pick");
+  if (evo) { pick.max = evo.generations.length; pick.value = evo.generations.length; }
+  pick.addEventListener("input", () => fillTable(Number(pick.value)));
+
+  drawGenerations(); drawCompare(); fillTable(Number(pick.value));
+  MLL.onTheme(() => { drawGenerations(); drawCompare(); });
+})();
+</script>
+</body>
+</html>

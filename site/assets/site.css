@@ -1,0 +1,215 @@
+/* Model Loop Lab: project site styles.
+   The shared portfolio bar (.sx-*) is styled by /scott/backbar.css only.
+   Nothing in this file may target an .sx- class. */
+
+:root {
+  color-scheme: light;
+  --surface: #f6f7f4;
+  --surface-raised: #ffffff;
+  --ink: #18201b;
+  --ink-2: #4a544d;
+  --ink-3: #6f7a72;
+  --rule: #d9ded8;
+  --spruce: #2e6a4c;
+  --spruce-soft: #e3eee7;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --baseline: #8a928c;
+  --pending-bg: #fff5d6;
+  --pending-ink: #6b5200;
+  --radius-lg: 14px;
+  --radius-sm: 6px;
+  --measure: 68ch;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface: #141916;
+    --surface-raised: #1c231f;
+    --ink: #eef1ec;
+    --ink-2: #c1c9c2;
+    --ink-3: #93a097;
+    --rule: #303a34;
+    --spruce: #7cc39d;
+    --spruce-soft: #1f3329;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --baseline: #8f9a92;
+    --pending-bg: #3a2f0c;
+    --pending-ink: #f3d77c;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #141916;
+  --surface-raised: #1c231f;
+  --ink: #eef1ec;
+  --ink-2: #c1c9c2;
+  --ink-3: #93a097;
+  --rule: #303a34;
+  --spruce: #7cc39d;
+  --spruce-soft: #1f3329;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --baseline: #8f9a92;
+  --pending-bg: #3a2f0c;
+  --pending-ink: #f3d77c;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+a { color: var(--spruce); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--series-1); outline-offset: 3px; border-radius: 3px; }
+
+.mll-wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .mll-wrap { padding: 0 32px; } }
+
+/* Project nav: sits under the portfolio bar */
+.mll-nav {
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+}
+.mll-nav .mll-wrap {
+  display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: baseline;
+  padding-top: 14px; padding-bottom: 14px;
+}
+@media (max-width: 719px) {
+  .mll-nav .mll-wrap { flex-wrap: nowrap; overflow-x: auto; gap: 18px; scrollbar-width: none; }
+  .mll-nav a.mll-tab { white-space: nowrap; }
+  .mll-brand { display: none; }
+}
+.mll-brand {
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 600;
+  color: var(--ink); text-decoration: none; margin-right: auto;
+}
+.mll-nav a.mll-tab { color: var(--ink-2); text-decoration: none; font-size: 0.95rem; padding: 2px 0; border-bottom: 2px solid transparent; }
+.mll-nav a.mll-tab:hover { color: var(--ink); }
+.mll-nav a.mll-tab[aria-current="page"] { color: var(--ink); border-bottom-color: var(--spruce); }
+
+/* Type */
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.5rem); margin: 0 0 0.4em; max-width: 18ch; }
+h2 { font-size: clamp(1.55rem, 3vw, 2.1rem); margin: 0 0 0.5em; }
+h3 { font-size: 1.2rem; margin: 0 0 0.35em; }
+p { margin: 0 0 1em; max-width: var(--measure); }
+.mll-lede { font-size: 1.2rem; color: var(--ink-2); max-width: 58ch; }
+.mll-small { font-size: 0.9rem; color: var(--ink-3); }
+code { font-size: 0.9em; background: var(--spruce-soft); padding: 1px 5px; border-radius: 4px; }
+
+section { padding: 56px 0; border-top: 1px solid var(--rule); }
+section:first-of-type { border-top: 0; }
+
+/* Hero: the generation strip is the page's one bold element */
+.mll-hero { padding: 48px 0 40px; }
+.mll-strip {
+  margin-top: 36px;
+  display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px;
+  align-items: end; height: 150px;
+}
+.mll-strip span {
+  display: block; background: var(--spruce); border-radius: 4px 4px 0 0;
+  height: var(--h, 10%); opacity: var(--o, 1);
+  transform-origin: bottom; animation: mll-grow 900ms cubic-bezier(.2,.7,.2,1) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+.mll-strip-axis { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem; color: var(--ink-3); }
+@keyframes mll-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .mll-strip span { animation: none; } }
+
+/* Sample-data notice */
+.mll-pending {
+  display: inline-flex; gap: 8px; align-items: center;
+  background: var(--pending-bg); color: var(--pending-ink);
+  border-radius: 999px; padding: 3px 12px; font-size: 0.85rem; font-weight: 600;
+}
+.mll-pending[hidden] { display: none; }
+.mll-pending svg { width: 15px; height: 15px; flex: none; }
+
+/* Two chapters on the overview */
+.mll-chapters { display: grid; gap: 20px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .mll-chapters { grid-template-columns: 1fr 1fr; } }
+.mll-chapter {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--surface-raised); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); padding: 24px 24px 20px;
+}
+.mll-chapter:hover { border-color: var(--spruce); }
+.mll-chapter h3 { font-size: 1.45rem; }
+.mll-chapter p { color: var(--ink-2); }
+.mll-chapter .mll-go { color: var(--spruce); font-weight: 600; }
+
+/* Key figures: plain row, not cards */
+.mll-figures { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px 32px; margin: 28px 0 0; padding: 0; list-style: none; }
+@media (min-width: 760px) { .mll-figures { grid-template-columns: repeat(4, 1fr); } }
+.mll-figures li { border-left: 3px solid var(--spruce); padding-left: 14px; }
+.mll-figures strong { display: block; font-family: var(--serif); font-size: 2rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.mll-figures span { font-size: 0.92rem; color: var(--ink-2); }
+
+/* The loop diagram: an actual sequence, so numbers are earned */
+.mll-steps { list-style: none; counter-reset: step; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .mll-steps { grid-template-columns: repeat(4, 1fr); } }
+.mll-steps li { counter-increment: step; position: relative; background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--radius-sm); padding: 16px 16px 14px 52px; }
+.mll-steps li::before {
+  content: counter(step); position: absolute; left: 14px; top: 14px;
+  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--spruce); color: var(--surface); font-weight: 700; font-size: 0.9rem;
+}
+.mll-steps strong { display: block; }
+.mll-steps span { font-size: 0.92rem; color: var(--ink-2); }
+.mll-repeat { margin-top: 10px; font-size: 0.92rem; color: var(--ink-3); }
+
+/* Chart block */
+.mll-chart-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.mll-chart {
+  background: var(--surface-raised); border: 1px solid var(--rule); border-radius: var(--radius-lg);
+  padding: 0; margin: 14px 0 6px; height: 400px; overflow: hidden;
+}
+.mll-chart-caption { font-size: 0.9rem; color: var(--ink-3); margin-bottom: 22px; }
+.mll-control { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 18px 0 6px; }
+.mll-control label { font-weight: 600; font-size: 0.95rem; }
+.mll-control input[type="range"] { flex: 1 1 220px; max-width: 420px; accent-color: var(--spruce); }
+.mll-control output { font-variant-numeric: tabular-nums; min-width: 9ch; color: var(--ink-2); }
+
+/* The four reading notes Scott asked for on every chart */
+.mll-notes { display: grid; gap: 18px 32px; grid-template-columns: 1fr; margin-top: 8px; }
+@media (min-width: 760px) { .mll-notes { grid-template-columns: 1fr 1fr; } }
+.mll-notes h3 { font-family: var(--sans); font-size: 1rem; font-weight: 700; color: var(--spruce); margin-bottom: 4px; }
+.mll-notes p { font-size: 0.98rem; color: var(--ink-2); margin: 0; }
+.mll-notes .mll-wait { font-style: italic; color: var(--ink-3); }
+
+/* Tables */
+.mll-table-wrap { overflow-x: auto; margin-top: 12px; }
+table.mll-table { border-collapse: collapse; width: 100%; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+.mll-table th, .mll-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.mll-table th { font-weight: 600; color: var(--ink-2); }
+.mll-table td.num, .mll-table th.num { text-align: right; }
+
+/* Notebook list */
+.mll-nblist { list-style: none; padding: 0; margin: 20px 0 0; }
+.mll-nblist li { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.mll-nblist li:first-child { border-top: 1px solid var(--rule); }
+.mll-nblist h3 { margin: 0; font-size: 1.15rem; }
+.mll-nblist p { grid-column: 1 / -1; margin: 0; color: var(--ink-2); font-size: 0.97rem; }
+.mll-status { font-size: 0.85rem; font-weight: 600; color: var(--ink-3); white-space: nowrap; }
+.mll-status.is-done { color: var(--spruce); }
+
+/* Next / previous chapter */
+.mll-pager { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.mll-pager a { font-weight: 600; }
+
+footer.mll-foot { border-top: 1px solid var(--rule); padding: 28px 0 40px; font-size: 0.9rem; color: var(--ink-3); }
+footer.mll-foot p { max-width: none; margin: 0 0 6px; }

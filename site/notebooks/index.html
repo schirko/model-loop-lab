@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Notebooks - Model Loop Lab</title>
+<meta name="description" content="The Jupyter notebooks behind every chart in Model Loop Lab.">
+<link rel="stylesheet" href="/scott/backbar.css">
+<link rel="icon" href="/scott/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="16x16" href="/scott/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/scott/favicon-32.png">
+<link rel="apple-touch-icon" href="/scott/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/scott/model-loop-lab/assets/site.css">
+</head>
+<body>
+<div class="sx-backbar">
+  <a class="sx-back" href="/scott/">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="sx-crumb">Model Loop Lab</span>
+  <span class="sx-links"><a href="/scott/model-loop-lab/notebooks/">Notebooks</a><a href="https://github.com/schirko/model-loop-lab">Code</a></span>
+</div>
+
+<nav class="mll-nav" aria-label="Project">
+  <div class="mll-wrap">
+    <a class="mll-brand" href="/scott/model-loop-lab/">Model Loop Lab</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/">Overview</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/loop/">The loop works</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/collapse/">Where loops break</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/notebooks/" aria-current="page">Notebooks</a>
+  </div>
+</nav>
+
+<main class="mll-wrap">
+  <section class="mll-hero">
+    <h1>The notebooks</h1>
+    <p class="mll-lede">Every chart on this site comes from one of these Jupyter notebooks. Each one shows the code, its output, and a plain-language reading of what the output means.</p>
+  </section>
+
+  <section>
+    <h2>In order</h2>
+    <ul class="mll-nblist">
+      <li><h3>Baseline: one plain model</h3><span class="mll-status">Planned</span>
+        <p>Loads the Colorado forest data, sets aside the held-out plots, and scores a default decision tree. Every later result is measured against this number.</p></li>
+      <li><h3>The evolution loop</h3><span class="mll-status">Planned</span>
+        <p>Builds the build, score, keep, change loop by hand and runs it for 20 generations, logging every model it tries.</p></li>
+      <li><h3>Racing the loop against Optuna and random guessing</h3><span class="mll-status">Planned</span>
+        <p>Gives three search methods the same 200-model budget and compares how fast each finds good settings.</p></li>
+      <li><h3>Model collapse</h3><span class="mll-status">Planned</span>
+        <p>Trains each generation only on the previous generation's made-up data, and measures what happens to accuracy on real plots and to the variety in the data.</p></li>
+    </ul>
+    <p class="mll-small">Each notebook will open here as a web page once it is finished. The source notebooks are in the <a href="https://github.com/schirko/model-loop-lab">GitHub repository</a>.</p>
+  </section>
+
+  <section class="mll-pager">
+    <a href="/scott/model-loop-lab/collapse/">Back: where loops break</a>
+    <a href="/scott/model-loop-lab/">Back to the overview</a>
+  </section>
+</main>
+
+<footer class="mll-foot">
+  <div class="mll-wrap">
+    <p>Model Loop Lab by Scott Schirkofsky. Part of my <a href="/scott/">project portfolio</a>.</p>
+  </div>
+</footer>
+
+<script src="/scott/model-loop-lab/assets/charts.js"></script>
+</body>
+</html>

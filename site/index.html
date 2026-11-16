@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Model Loop Lab</title>
+<meta name="description" content="Can AI build better AI? A model-search loop on Colorado forest data, measured generation by generation, and the loop that breaks when models learn only from other models.">
+<link rel="stylesheet" href="/scott/backbar.css">
+<link rel="icon" href="/scott/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="16x16" href="/scott/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/scott/favicon-32.png">
+<link rel="apple-touch-icon" href="/scott/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/scott/model-loop-lab/assets/site.css">
+</head>
+<body>
+<div class="sx-backbar">
+  <a class="sx-back" href="/scott/">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="sx-crumb">Model Loop Lab</span>
+  <span class="sx-links"><a href="/scott/model-loop-lab/notebooks/">Notebooks</a><a href="https://github.com/schirko/model-loop-lab">Code</a></span>
+</div>
+
+<nav class="mll-nav" aria-label="Project">
+  <div class="mll-wrap">
+    <a class="mll-brand" href="/scott/model-loop-lab/">Model Loop Lab</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/" aria-current="page">Overview</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/loop/">The loop works</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/collapse/">Where loops break</a>
+    <a class="mll-tab" href="/scott/model-loop-lab/notebooks/">Notebooks</a>
+  </div>
+</nav>
+
+<main class="mll-wrap">
+  <section class="mll-hero">
+    <h1>Can AI build better AI?</h1>
+    <p class="mll-lede">A program builds ten models, scores them, keeps the best three, changes them a little, and goes again. This project runs that loop on Colorado forest data, measures how much each generation improves, and then shows a loop that gets worse instead.</p>
+    <p><span class="mll-pending" data-sample-for="evolution" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Sample data: real results arrive with milestone 2</span></p>
+    <div class="mll-strip" id="strip" role="img" aria-label="Best test accuracy for each of 20 generations"></div>
+    <div class="mll-strip-axis"><span>Generation 1</span><span>Best accuracy each generation</span><span id="strip-last">Generation 20</span></div>
+  </section>
+
+  <section>
+    <h2>What the loop achieved</h2>
+    <p>Every model is scored on forest plots it never trained on. The starting point is a plain decision tree with default settings, so each gain is measured against something real.</p>
+    <ul class="mll-figures">
+      <li><strong id="fig-baseline">–</strong><span>Starting accuracy, default decision tree</span></li>
+      <li><strong id="fig-best">–</strong><span>Best accuracy after the loop</span></li>
+      <li><strong id="fig-gens">–</strong><span>Generations run</span></li>
+      <li><strong id="fig-collapse">–</strong><span>Accuracy after 10 rounds of training on its own output</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Two experiments</h2>
+    <div class="mll-chapters">
+      <a class="mll-chapter" href="/scott/model-loop-lab/loop/">
+        <h3>The loop works</h3>
+        <p>An evolutionary search breeds better model settings over 20 generations. It is then raced against Optuna, a standard tuning library, and plain random guessing.</p>
+        <span class="mll-go">See the improvement loop</span>
+      </a>
+      <a class="mll-chapter" href="/scott/model-loop-lab/collapse/">
+        <h3>Where loops break</h3>
+        <p>A model learns the data, writes new data, and the next model learns only from that. After a few rounds the data loses its variety and accuracy on real forest plots falls.</p>
+        <span class="mll-go">See the collapse</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>The data</h2>
+    <p>The Forest Covertype dataset comes from the Roosevelt National Forest in northern Colorado. Each row is a 30 by 30 meter plot described by map features: elevation, slope, aspect, distance to water, roads and past fire points, wilderness area and soil type. The label is which of seven tree covers grows there, such as spruce-fir or lodgepole pine.</p>
+    <p>The full set has about 581,000 plots. The loops use a fixed sample of 20,000 so each generation trains in seconds, with a separate held-out set for every score shown on this site.</p>
+    <p class="mll-small">Source: Blackard and Dean, U.S. Forest Service and Colorado State University, via the UCI Machine Learning Repository and scikit-learn's <code>fetch_covtype</code>.</p>
+  </section>
+
+  <section>
+    <h2>How it was built</h2>
+    <p>Python with pandas, scikit-learn and Optuna. Each step is worked through in a Jupyter notebook, with the result and a plain-language reading under every chart. The notebooks write small results files, and this site draws its charts from them.</p>
+    <p><a href="/scott/model-loop-lab/notebooks/">Read the notebooks</a></p>
+    <p><a href="https://github.com/schirko/model-loop-lab">View the code on GitHub</a></p>
+  </section>
+</main>
+
+<footer class="mll-foot">
+  <div class="mll-wrap">
+    <p>Model Loop Lab by Scott Schirkofsky. Part of my <a href="/scott/">project portfolio</a>.</p>
+  </div>
+</footer>
+
+<script src="/scott/model-loop-lab/assets/charts.js"></script>
+<script>
+(async function () {
+  try {
+    const evo = await MLL.load("evolution");
+    MLL.markSample("evolution", evo.sample);
+    const gens = evo.generations;
+    const scores = gens.map((g) => g.best);
+    const lo = Math.min(evo.baseline.score, ...scores) - 0.01, hi = Math.max(...scores);
+    const strip = document.getElementById("strip");
+    strip.style.gridTemplateColumns = "repeat(" + gens.length + ", 1fr)";
+    strip.innerHTML = gens.map((g, i) => {
+      const h = 12 + 88 * (g.best - lo) / (hi - lo);
+      return '<span style="--h:' + h.toFixed(1) + '%;--i:' + i + '" title="Generation ' + g.gen + ': ' + MLL.pct(g.best) + '"></span>';
+    }).join("");
+    document.getElementById("strip-last").textContent = "Generation " + gens[gens.length - 1].gen;
+    document.getElementById("fig-baseline").textContent = MLL.pct(evo.baseline.score);
+    document.getElementById("fig-best").textContent = MLL.pct(Math.max(...scores));
+    document.getElementById("fig-gens").textContent = gens.length;
+  } catch (e) { console.error(e); }
+  try {
+    const col = await MLL.load("collapse");
+    const last = col.generations[col.generations.length - 1];
+    document.getElementById("fig-collapse").textContent = MLL.pct(last.real_test_accuracy);
+  } catch (e) { console.error(e); }
+})();
+</script>
+</body>
+</html>
