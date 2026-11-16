@@ -82,7 +82,8 @@ model-loop-lab/
 │   └── 01_data_and_baseline.ipynb  data, sample, split, scoring, baseline (M1)
 ├── src/                          shared Python code
 │   ├── __init__.py               makes src importable (from src.evaluate import ...)
-│   └── evaluate.py               data loading, sample, split and scoring (M1)
+│   ├── evaluate.py               data loading, sample, split and scoring (M1)
+│   └── web_results.py            save_web_result(): notebooks save results for the site
 ├── results/web/                  real chart data written by notebooks
 ├── data/                         downloaded data, not committed
 ├── .env.example                  copy to .env and set SITE_DIR
@@ -146,12 +147,13 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 **Charts.** Each chart page loads Plotly, then `assets/charts.js`, then its own short script. The script calls `MLL.load("<name>")` to fetch `/scott/model-loop-lab/data/<name>.json` and `MLL.draw()` to render. Colors come from CSS variables, so light and dark mode both work.
 
-**Sample data and the switch to real data.** Every data file has a `"sample"` field. While it is `true`, the page shows a "Sample data" notice next to the chart. Notebooks write real results to `results/web/<name>.json` with `"sample": false`. The build script copies those over the sample files, and the notice disappears. Nothing in the pages needs to change.
+**Sample data and the switch to real data.** Notebooks save results with `save_web_result(name, payload)` from `src/web_results.py`, which only accepts names the site reads (`baseline`, `evolution`, `search_compare`, `collapse`) and always marks the file `"sample": false` with today's date. Every data file has a `"sample"` field. While it is `true`, the page shows a "Sample data" notice next to the chart. Notebooks write real results to `results/web/<name>.json` with `"sample": false`. The build script copies those over the sample files, and the notice disappears. Nothing in the pages needs to change.
 
 **Data file formats.**
 
 | File | Read by | Main fields |
 |---|---|---|
+| `baseline.json` | overview, The loop works | `label`, `score`, `train_score`, `held_out_plots`, `training_plots`, `tree_depth`, `tree_leaves`, `seed`, `recorded` |
 | `evolution.json` | overview, The loop works | `baseline {label, score}`, `generations [{gen, best, median, worst, top [{model, params, score}]}]` |
 | `search_compare.json` | The loop works | `trials`, `evolution`, `optuna`, `random` (best-so-far accuracy after each model tried) |
 | `collapse.json` | overview, Where loops break | `generations [{gen, real_test_accuracy, diversity, elevation_hist {bins, counts}}]` |
@@ -180,6 +182,15 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-16: E-023 baseline saved for the site
+
+**Added:** `src/web_results.py` (`save_web_result()`), `tests/test_web_results.py` (4 tests), `site/data/baseline.json` (sample stand-in), notebook 01 Step 10, a baseline shape test in `tests/test_site_pages.py` (suite now 33).
+**Changed:** `site/assets/charts.js` gained `MLL.baseline()`, which loads `baseline.json` and, when it holds real data, replaces the copy inside `evolution.json`. The overview's figures now show one sample tag naming only the figures still on sample data.
+
+**Decisions**
+- The baseline gets its own file instead of living inside `evolution.json`: it is produced by notebook 01, long before notebook 02 writes the evolution results, so the site can show it as soon as it exists.
+- `save_web_result()` refuses unknown names and forces `"sample": false`, so a typo can't create a file the site ignores and a notebook can never publish sample data by mistake.
 
 ### 2026-11-16: E-007 baseline steps in notebook 01
 

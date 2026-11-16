@@ -76,7 +76,21 @@
   }
   window.addEventListener("resize", () => redraws.forEach((f) => f()));
 
+  // The baseline lives in its own file (written by notebook 01). Pages that
+  // also draw the evolution chart use it in place of evolution.json's copy.
+  async function baseline(evo) {
+    try {
+      const b = await load("baseline");
+      markSample("baseline", b.sample);
+      if (evo && !b.sample) evo.baseline = { label: b.label, score: b.score };
+      return b;
+    } catch (e) {
+      console.error(e);
+      return evo ? Object.assign({ sample: true }, evo.baseline) : null;
+    }
+  }
+
   function pct(v, digits) { return (v * 100).toFixed(digits == null ? 1 : digits) + "%"; }
 
-  window.MLL = { css, load, markSample, showError, layout, config, onTheme, draw, pct };
+  window.MLL = { css, load, markSample, showError, layout, config, onTheme, draw, baseline, pct };
 })();

@@ -42,7 +42,6 @@ None.
 
 | ID | Enhancement | Priority | Status |
 |---|---|---|---|
-| E-023 | Save the baseline to `results/web/baseline.json` and have the site read it, so "Starting accuracy" shows the real number | P1 | Open |
 | E-024 | Run notebook 01 in PyCharm on the real data and write the "What it means" notes from the actual numbers | P1 | Open |
 
 ### Notebook 02: Evolution loop
@@ -90,6 +89,7 @@ None.
 | E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | Site | 2026-11-15 |
 | E-020 | Sample-data version published to schirko.com/scott/model-loop-lab | Site | 2026-11-15 |
 | E-008 | `src/evaluate.py`: shared loading, 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests | Notebook 01 | 2026-11-15 |
+| E-023 | Notebook 01 Step 10 saves `results/web/baseline.json`; overview and The loop works read it; sample tag on the overview names only figures still on sample data; `src/web_results.py` with 4 tests | Notebook 01 | 2026-11-16 |
 | E-007 | Notebook 01 Steps 7 to 9: baseline score with training-score comparison, per-cover-type table, confusion chart; `fit_predict()` and `cover_type_report()` added to `src/evaluate.py` with 2 tests | Notebook 01 | 2026-11-16 |
 | E-022 | Notebook 01 started: setup, full dataset, sample, split, guessing versus a tree, repeatability check | Notebook 01 | 2026-11-16 |
 
@@ -97,6 +97,7 @@ None.
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | E-023 done. Test suite now 33 tests. |
 | 2026-11-16 | E-007 done. Test suite now 28 tests. |
 | 2026-11-16 | Reorganized around four notebooks. Enhancements are now the tasks that build each notebook and the site, grouped by notebook. Notebook 01 renamed `01_data_and_baseline.ipynb`; the baseline (E-007) goes into it instead of a separate notebook. Added E-022 to E-025. |
 | 2026-11-15 | E-008 done. Test suite now 26 tests. |

@@ -113,7 +113,7 @@
 <script>
 (async function () {
   let evo, cmp;
-  try { evo = await MLL.load("evolution"); MLL.markSample("evolution", evo.sample); }
+  try { evo = await MLL.load("evolution"); MLL.markSample("evolution", evo.sample); await MLL.baseline(evo); }
   catch (e) { MLL.showError(document.getElementById("chart-generations"), e); }
   try { cmp = await MLL.load("search_compare"); MLL.markSample("search_compare", cmp.sample); }
   catch (e) { MLL.showError(document.getElementById("chart-compare"), e); }

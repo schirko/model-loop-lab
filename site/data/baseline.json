@@ -1,0 +1,8 @@
+{
+ "sample": true,
+ "label": "Default decision tree",
+ "score": 0.781,
+ "train_score": 1.0,
+ "held_out_plots": 5000,
+ "training_plots": 15000
+}

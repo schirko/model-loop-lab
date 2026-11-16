@@ -69,7 +69,8 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 - `src/evaluate.py`: shared loading, sample, split and scoring, with pytest tests (E-008) - done
 - Notebook 01 walkthrough of the data, sample, split and scoring (E-022) - done
 - Baseline steps: default decision tree, per-cover-type results (E-007) - done
-- Baseline saved to the site (E-023), notebook run on real data and notes written (E-024)
+- Baseline saved to the site (E-023) - done
+- Notebook run on real data and notes written (E-024)
 
 **Done when:** notebook 01 runs top to bottom in PyCharm and the site shows the real baseline.
 
@@ -122,6 +123,7 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | E-023 done: baseline saved for the site. Only E-024 (real run) left in M1. |
 | 2026-11-16 | E-007 done: baseline steps added to notebook 01. |
 | 2026-11-16 | Reorganized around four notebooks, one per milestone M1 to M4. Notebook 01 (data and baseline) started. |
 | 2026-11-15 | M1 started: `src/evaluate.py` done and tested. |

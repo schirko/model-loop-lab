@@ -51,3 +51,9 @@ def test_collapse_data_shape():
     for g in gens:
         assert 0 <= g["real_test_accuracy"] <= 1
         assert len(g["elevation_hist"]["bins"]) == len(g["elevation_hist"]["counts"])
+
+
+def test_baseline_data_shape():
+    d = load("baseline")
+    assert {"sample", "label", "score", "train_score"} <= d.keys()
+    assert 0 < d["score"] <= d["train_score"] <= 1

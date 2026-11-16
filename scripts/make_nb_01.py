@@ -10,11 +10,11 @@ code = nbf.v4.new_code_cell
 cells = [
     md("""# 01. Data and baseline
 
-**Notebook:** 01 of 4 · **Milestone:** M1 · **Code:** `src/evaluate.py` · **Enhancements:** E-008, E-022, E-007 (done), E-023, E-024 (to come)
+**Notebook:** 01 of 4 · **Milestone:** M1 · **Code:** `src/evaluate.py` · **Enhancements:** E-008, E-022, E-007, E-023 (done), E-024 (to come)
 
 This notebook answers two questions: what does the Colorado forest data look like, and how good is a plain model with no tuning? The second answer is the baseline, the number every later notebook has to beat.
 
-Every experiment in Model Loop Lab gets its data and its scores from one file, `src/evaluate.py`. Steps 1 to 6 walk through that file and check each piece on the real Forest Covertype data. Steps 7 to 9 record the baseline and show where it goes wrong.
+Every experiment in Model Loop Lab gets its data and its scores from one file, `src/evaluate.py`. Steps 1 to 6 walk through that file and check each piece on the real Forest Covertype data. Steps 7 to 9 record the baseline and show where it goes wrong. Step 10 saves it for the website.
 
 **Why one shared file?** If each notebook loaded data and scored models its own way, a better score might only mean a luckier split of the data. Sharing the code means every model on the site is judged on exactly the same plots, so the comparisons are fair.
 
@@ -235,7 +235,40 @@ Each row is a real cover type and adds up to 100% across. Each column is the tre
 The biggest off-diagonal squares show which cover types look alike from the map features. Expect Spruce/fir and Lodgepole pine to be confused with each other, since they share the middle elevations, and the lower-elevation types (Ponderosa pine, Douglas-fir, Cottonwood/willow) to be confused among themselves. Those mix-ups are where a better model has the most to gain.
 
 ### What's next and why
-The baseline is recorded. Next, the baseline gets saved where the website can read it (E-023), so the site's "Starting accuracy" shows this real number. Then notebook 02 starts the evolution loop and tries to beat it."""),
+The baseline is recorded. The last step saves it where the website can read it."""),
+
+    md("""## Step 10. Save the baseline for the website
+
+### What we're looking for
+A small file, `results/web/baseline.json`, holding the baseline and how it was measured. When `scripts/build_site.py` runs, this file replaces the site's sample baseline. "Starting accuracy" on the overview and the dashed "Starting model" line on The loop works page then show the real number, and their "Sample data" tags go away."""),
+    code("""from src.web_results import save_web_result
+
+path = save_web_result("baseline", {
+    "label": "Default decision tree",
+    "score": round(baseline, 4),
+    "train_score": round(train_score, 4),
+    "held_out_plots": len(split.y_test),
+    "training_plots": len(split.y_train),
+    "tree_depth": int(fitted.get_depth()),
+    "tree_leaves": int(fitted.get_n_leaves()),
+    "seed": SEED,
+})
+print(f"Saved {path.relative_to(PROJECT_ROOT)}")
+print(path.read_text(encoding="utf-8"))"""),
+    md("""### How to read it
+The path of the saved file, then its contents. `"sample": false` marks it as real data. `"recorded"` is today's date. The other fields are the numbers from Step 7.
+
+### What it means
+The site and the notebook now share one source for the baseline. If the data or the seed ever changes, rerunning this notebook and the build updates the site with no hand edits, so the two can never disagree.
+
+### What's next and why
+Run the build to put the number on the site:
+
+```
+python scripts/build_site.py
+```
+
+The build should list `baseline.json` under "Real results used." Then notebook 02 starts the evolution loop and tries to beat this number."""),
 
     md("""## Summary
 
@@ -247,6 +280,7 @@ The baseline is recorded. Next, the baseline gets saved where the website can re
 | Scoring | Repeatable, never changes the model passed in |
 | Baseline | Default decision tree, scored in Step 7 |
 | Weak spots | Rare cover types and look-alike pairs, Steps 8 and 9 |
+| Saved for the site | `results/web/baseline.json`, Step 10 |
 
 The data and scoring checks also run automatically in `tests/test_evaluate.py` every time `python -m pytest` runs, on a small made-up dataset so they don't need the download."""),
 ]

@@ -46,7 +46,10 @@
   </section>
 
   <section>
-    <h2>What the loop achieved</h2>
+    <div class="mll-chart-head">
+      <h2>What the loop achieved</h2>
+      <span class="mll-pending" id="figs-sample" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><span id="figs-sample-text">Sample data</span></span>
+    </div>
     <p>Every model is scored on forest plots it never trained on. The starting point is a plain decision tree with default settings, so each gain is measured against something real.</p>
     <ul class="mll-figures">
       <li><strong id="fig-baseline">–</strong><span>Starting accuracy, default decision tree</span></li>
@@ -96,9 +99,15 @@
 <script src="/scott/model-loop-lab/assets/charts.js"></script>
 <script>
 (async function () {
-  try {
-    const evo = await MLL.load("evolution");
-    MLL.markSample("evolution", evo.sample);
+  const samples = [];
+  let evo = null;
+  try { evo = await MLL.load("evolution"); MLL.markSample("evolution", evo.sample); } catch (e) { console.error(e); }
+  const base = await MLL.baseline(evo);
+  if (base) {
+    document.getElementById("fig-baseline").textContent = MLL.pct(base.score);
+    if (base.sample) samples.push("starting accuracy");
+  }
+  if (evo) {
     const gens = evo.generations;
     const scores = gens.map((g) => g.best);
     const lo = Math.min(evo.baseline.score, ...scores) - 0.01, hi = Math.max(...scores);
@@ -109,15 +118,22 @@
       return '<span style="--h:' + h.toFixed(1) + '%;--i:' + i + '" title="Generation ' + g.gen + ': ' + MLL.pct(g.best) + '"></span>';
     }).join("");
     document.getElementById("strip-last").textContent = "Generation " + gens[gens.length - 1].gen;
-    document.getElementById("fig-baseline").textContent = MLL.pct(evo.baseline.score);
     document.getElementById("fig-best").textContent = MLL.pct(Math.max(...scores));
     document.getElementById("fig-gens").textContent = gens.length;
-  } catch (e) { console.error(e); }
+    if (evo.sample) samples.push("loop results");
+  }
   try {
     const col = await MLL.load("collapse");
     const last = col.generations[col.generations.length - 1];
     document.getElementById("fig-collapse").textContent = MLL.pct(last.real_test_accuracy);
+    if (col.sample) samples.push("collapse result");
   } catch (e) { console.error(e); }
+  if (samples.length) {
+    const all = samples.length === 3;
+    document.getElementById("figs-sample-text").textContent =
+      all ? "Sample data" : "Sample data: " + samples.join(", ");
+    document.getElementById("figs-sample").hidden = false;
+  }
 })();
 </script>
 </body>
