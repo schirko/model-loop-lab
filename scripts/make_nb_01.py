@@ -1,4 +1,4 @@
-"""Builds notebooks/01_shared_scoring.ipynb (kept so the notebook can be regenerated)."""
+"""Builds notebooks/01_data_and_baseline.ipynb (kept so the notebook can be regenerated)."""
 
 from pathlib import Path
 
@@ -8,11 +8,13 @@ md = nbf.v4.new_markdown_cell
 code = nbf.v4.new_code_cell
 
 cells = [
-    md("""# 01. Shared data loading and scoring
+    md("""# 01. Data and baseline
 
-**Notebook:** 01 · **Item:** E-008 · **Milestone:** M1 (Baseline model and shared scoring) · **Code:** `src/evaluate.py`
+**Notebook:** 01 of 4 · **Milestone:** M1 · **Code:** `src/evaluate.py` · **Enhancements:** E-008, E-022, E-007 (done), E-023, E-024 (to come)
 
-Every experiment in Model Loop Lab, from the evolution loop to model collapse, gets its data and its scores from one file, `src/evaluate.py`. This notebook walks through that file one piece at a time and checks each piece on the real Forest Covertype data.
+This notebook answers two questions: what does the Colorado forest data look like, and how good is a plain model with no tuning? The second answer is the baseline, the number every later notebook has to beat.
+
+Every experiment in Model Loop Lab gets its data and its scores from one file, `src/evaluate.py`. Steps 1 to 6 walk through that file and check each piece on the real Forest Covertype data. Steps 7 to 9 record the baseline and show where it goes wrong.
 
 **Why one shared file?** If each notebook loaded data and scored models its own way, a better score might only mean a luckier split of the data. Sharing the code means every model on the site is judged on exactly the same plots, so the comparisons are fair.
 
@@ -41,7 +43,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 from src.evaluate import (
     COVER_TYPES, SAMPLE_SIZE, SEED, TEST_SIZE,
-    evaluate, load_covertype, make_split,
+    cover_type_report, evaluate, fit_predict, load_covertype, make_split,
 )
 
 pd.set_option("display.max_columns", 12)
@@ -125,7 +127,7 @@ With data and split fixed, the last piece is the scoring function itself."""),
 Two scores that frame everything that follows:
 
 * **Guessing**: a "model" that always predicts the most common cover type. Any real model has to beat this to be worth anything.
-* **A plain decision tree** with default settings. This is a preview of the baseline that E-007 records properly."""),
+* **A plain decision tree** with default settings. This is a preview of the baseline, recorded properly in the steps that follow."""),
     code("""guess = evaluate(DummyClassifier(strategy="most_frequent"), split)
 tree = evaluate(DecisionTreeClassifier(random_state=SEED), split)
 
@@ -159,7 +161,81 @@ Both scores, whether they match exactly, and whether the model object we passed 
 Identical scores and an untrained original mean any difference between two models in the loop comes from their settings, not from chance or from one run leaking into the next.
 
 ### What's next and why
-The shared pieces work on the real data. The next notebook, **02_baseline** (E-007), uses them to record the official baseline, the plain decision tree's score, and writes it to the site as the number the evolution loop has to beat."""),
+The shared pieces work on the real data. Now they can be trusted to record the official baseline."""),
+
+    md("""## Step 7. Record the baseline
+
+### What we're looking for
+The **baseline**: the accuracy of a decision tree with every setting left at its default. Nobody chose its settings, so it shows how well a model does with zero tuning. Every improvement the evolution loop claims in notebook 02 is measured against this number.
+
+We also score the tree on the plots it trained on. Comparing the two scores shows whether the tree learned general patterns or just memorized its training plots."""),
+    code("""baseline_model = DecisionTreeClassifier(random_state=SEED)
+fitted, predictions = fit_predict(baseline_model, split)
+
+baseline = evaluate(baseline_model, split)
+train_score = fitted.score(split.X_train, split.y_train)
+
+print(f"Baseline accuracy on held-out plots: {baseline:.2%}")
+print(f"Accuracy on its own training plots:  {train_score:.2%}")
+print(f"Tree size: {fitted.get_depth()} levels deep, {fitted.get_n_leaves():,} leaves")
+print(f"Wrong on {int(round((1 - baseline) * len(split.y_test))):,} of {len(split.y_test):,} held-out plots")"""),
+    md("""### How to read it
+The first line is the baseline. The second is the same tree scored on the 15,000 plots it learned from. The third line gives the tree's size: each level is one more yes/no question, and each leaf is a final answer. The last line turns the baseline into a count of mistakes.
+
+### What it means
+A default tree keeps splitting until every training plot is sorted perfectly, which is why its training score is at or near 100%. It grows thousands of leaves, many of them fitted to single, unusual plots. The drop from that near-perfect training score to the held-out score is **overfitting**: the tree memorized details that don't carry over to new plots.
+
+That gap is exactly what the evolution loop can work on. Settings such as maximum depth and minimum leaf size stop a tree from memorizing, and other model types average many trees together. The loop's job is to find the combination that closes the gap.
+
+### What's next and why
+A single accuracy number hides where the mistakes are. With cover types this uneven, the tree could be strong on the common types and weak on the rare ones."""),
+
+    md("""## Step 8. Which cover types does the baseline get right?
+
+### What we're looking for
+For each cover type: how many held-out plots it has, how many the tree got right (**recall**), and how trustworthy the tree's answer is when it names that type (**precision**). Rare cover types are where a model is most likely to struggle."""),
+    code("""report = cover_type_report(split.y_test, predictions)
+report.style.format({"recall": "{:.1%}", "precision": "{:.1%}"})"""),
+    md("""### How to read it
+* **plots**: how many of the 5,000 held-out plots really are this cover type
+* **correct**: how many of those the tree labeled correctly
+* **recall**: correct ÷ plots. "Of the real Aspen plots, how many did the tree find?"
+* **precision**: of every plot the tree *called* this type, the share that really were. "When the tree says Aspen, how often is it right?"
+
+### What it means
+Look at whether the low recall rates line up with the small plot counts. If they do, the baseline is weakest on the cover types it saw the fewest examples of. That's normal for an untuned tree, and it means the overall accuracy is carried mostly by Lodgepole pine and Spruce/fir.
+
+### What's next and why
+The table says how often each type is missed but not what it gets mistaken for. The next chart shows that."""),
+
+    md("""## Step 9. What gets confused with what?
+
+### What we're looking for
+Patterns in the mistakes. Cover types that grow in similar places, at similar elevations and on similar soils, should be the ones the tree mixes up."""),
+    code("""import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
+names = list(COVER_TYPES.values())
+fig, ax = plt.subplots(figsize=(8, 7))
+ConfusionMatrixDisplay.from_predictions(
+    split.y_test, predictions,
+    labels=list(COVER_TYPES), display_labels=names,
+    normalize="true", values_format=".0%", cmap="Greens", colorbar=False, ax=ax,
+)
+ax.set_xlabel("Tree's answer")
+ax.set_ylabel("Real cover type")
+ax.set_title("Baseline decision tree: share of each real cover type by answer")
+plt.xticks(rotation=35, ha="right")
+plt.tight_layout()
+plt.show()"""),
+    md("""### How to read it
+Each row is a real cover type and adds up to 100% across. Each column is the tree's answer. The diagonal from top left to bottom right shows correct answers, the same numbers as the recall column in Step 8. Any other shaded square is a mistake: the row's cover type was called the column's.
+
+### What it means
+The biggest off-diagonal squares show which cover types look alike from the map features. Expect Spruce/fir and Lodgepole pine to be confused with each other, since they share the middle elevations, and the lower-elevation types (Ponderosa pine, Douglas-fir, Cottonwood/willow) to be confused among themselves. Those mix-ups are where a better model has the most to gain.
+
+### What's next and why
+The baseline is recorded. Next, the baseline gets saved where the website can read it (E-023), so the site's "Starting accuracy" shows this real number. Then notebook 02 starts the evolution loop and tries to beat it."""),
 
     md("""## Summary
 
@@ -169,14 +245,16 @@ The shared pieces work on the real data. The next notebook, **02_baseline** (E-0
 | Sample | 20,000 plots, cover-type shares kept |
 | Split | 15,000 training / 5,000 held-out, no overlap |
 | Scoring | Repeatable, never changes the model passed in |
+| Baseline | Default decision tree, scored in Step 7 |
+| Weak spots | Rare cover types and look-alike pairs, Steps 8 and 9 |
 
-The same checks run automatically in `tests/test_evaluate.py` every time `python -m pytest` runs, on a small made-up dataset so they don't need the download."""),
+The data and scoring checks also run automatically in `tests/test_evaluate.py` every time `python -m pytest` runs, on a small made-up dataset so they don't need the download."""),
 ]
 
 nb = nbf.v4.new_notebook(cells=cells, metadata={
     "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
     "language_info": {"name": "python"},
 })
-out = Path(__file__).resolve().parent.parent / "notebooks" / "01_shared_scoring.ipynb"
+out = Path(__file__).resolve().parent.parent / "notebooks" / "01_data_and_baseline.ipynb"
 nbf.write(nb, out)
 print(f"Wrote {out}")

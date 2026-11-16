@@ -39,21 +39,19 @@
 <main class="mll-wrap">
   <section class="mll-hero">
     <h1>The notebooks</h1>
-    <p class="mll-lede">Every step of this project has its own Jupyter notebook, numbered in the order the work was done. Each one shows the code, its output, and a plain-language reading of what the output means.</p>
+    <p class="mll-lede">The project is four Jupyter notebooks, one per question. Each one shows the code, its output, and a plain-language reading of what the output means.</p>
   </section>
 
   <section>
     <h2>In order</h2>
     <ul class="mll-nblist">
-      <li><h3>01. Shared data loading and scoring</h3><span class="mll-status is-done">Written</span>
-        <p>Loads the Colorado forest data, takes a 20,000-plot sample that keeps every cover type's share, holds back 5,000 plots for testing, and checks the scoring is fair and repeatable.</p></li>
-      <li><h3>02. Baseline: one plain model</h3><span class="mll-status">Next</span>
-        <p>Scores a default decision tree on the held-out plots. Every later result is measured against this number.</p></li>
-      <li><h3>The evolution loop</h3><span class="mll-status">Planned</span>
-        <p>Builds the build, score, keep, change loop by hand and runs it for 20 generations, logging every model it tries.</p></li>
-      <li><h3>Racing the loop against Optuna and random guessing</h3><span class="mll-status">Planned</span>
+      <li><h3>01. Data and baseline</h3><span class="mll-status">In progress</span>
+        <p>Loads the Colorado forest data, takes a 20,000-plot sample that keeps every cover type's share, holds back 5,000 plots for testing, and scores a plain decision tree. Every later result is measured against that number.</p></li>
+      <li><h3>02. The evolution loop</h3><span class="mll-status">Planned</span>
+        <p>Builds the build, score, keep, change loop and runs it for 20 generations, logging every model it tries.</p></li>
+      <li><h3>03. Racing the loop against Optuna and random guessing</h3><span class="mll-status">Planned</span>
         <p>Gives three search methods the same 200-model budget and compares how fast each finds good settings.</p></li>
-      <li><h3>Model collapse</h3><span class="mll-status">Planned</span>
+      <li><h3>04. Model collapse</h3><span class="mll-status">Planned</span>
         <p>Trains each generation only on the previous generation's made-up data, and measures what happens to accuracy on real plots and to the variety in the data.</p></li>
     </ul>
     <p class="mll-small">Each notebook will open here as a web page once it is finished. The source notebooks are in the <a href="https://github.com/schirko/model-loop-lab">GitHub repository</a>.</p>

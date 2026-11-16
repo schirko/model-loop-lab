@@ -111,3 +111,27 @@ def test_load_covertype_samples_and_names_label(monkeypatch, small_data, tmp_pat
 
 def test_cover_type_names_cover_all_seven():
     assert sorted(ev.COVER_TYPES) == [1, 2, 3, 4, 5, 6, 7]
+
+
+def test_fit_predict_matches_evaluate(small_data):
+    split = ev.make_split(*small_data)
+    model = DecisionTreeClassifier(random_state=0)
+    fitted, preds = ev.fit_predict(model, split)
+    assert len(preds) == len(split.y_test)
+    assert (preds == split.y_test).mean() == pytest.approx(ev.evaluate(model, split))
+    assert not hasattr(model, "tree_")
+
+
+def test_cover_type_report_counts_and_rates():
+    y_true = pd.Series([1, 1, 1, 2, 2, 7])
+    y_pred = pd.Series([1, 1, 2, 2, 1, 7])
+    report = ev.cover_type_report(y_true, y_pred)
+    assert list(report.index) == list(ev.COVER_TYPES.values())
+    spruce = report.loc["Spruce/fir"]
+    assert spruce["plots"] == 3 and spruce["correct"] == 2
+    assert spruce["recall"] == pytest.approx(2 / 3)
+    assert spruce["precision"] == pytest.approx(2 / 3)
+    assert report.loc["Krummholz", "recall"] == 1.0
+    assert report["correct"].sum() == 4
+    # a type with no plots and no predictions has no rates, not an error
+    assert pd.isna(report.loc["Aspen", "recall"])

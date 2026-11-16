@@ -78,8 +78,8 @@ model-loop-lab/
 ├── scripts/build_site.py         publishes site/ into the portfolio folder
 ├── scripts/make_nb_01.py         regenerates notebook 01 from code
 ├── tests/                        pytest tests
-├── notebooks/                    one numbered notebook per item: 01_, 02_, ...
-│   └── 01_shared_scoring.ipynb   E-008 walkthrough
+├── notebooks/                    the four project notebooks
+│   └── 01_data_and_baseline.ipynb  data, sample, split, scoring, baseline (M1)
 ├── src/                          shared Python code
 │   ├── __init__.py               makes src importable (from src.evaluate import ...)
 │   └── evaluate.py               data loading, sample, split and scoring (M1)
@@ -165,11 +165,13 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 | `load_covertype()` | Downloads Covertype once into `data/` (about 11 MB), then returns a 20,000-plot sample, stratified so every cover type keeps its share |
 | `make_split(X, y)` | 75% training plots, 25% held-out test plots, stratified, seed 42 |
 | `evaluate(model, split)` | Trains a fresh copy of the model and returns accuracy on the held-out plots |
+| `fit_predict(model, split)` | Same training, but returns the trained copy and its held-out predictions |
+| `cover_type_report(y_true, y_pred)` | One row per cover type: plots, correct, recall, precision |
 | `COVER_TYPES` | Names for cover types 1 to 7 (Spruce/fir, Lodgepole pine, ...) |
 
 One seed (42) drives every random step, so rerunning a notebook gives the same numbers.
 
-**Notebooks.** Every item gets a notebook in `notebooks/`, numbered in the order the work is done. Each one: setup cell, then for every step a "What we're looking for" note, the code, its output, and "How to read it", "What it means", "What's next and why". To run one in PyCharm: open the `.ipynb`, pick the project's `.venv` as the kernel (top right), click **Run All**. The setup cell adds the project root to the import path, so `from src.evaluate import ...` works from inside `notebooks/`.
+**Notebooks.** The project has four notebooks, one per milestone: `01_data_and_baseline`, `02_evolution_loop`, `03_search_race`, `04_model_collapse`. Many enhancements go into each one. Each notebook has: setup cell, then for every step a "What we're looking for" note, the code, its output, and "How to read it", "What it means", "What's next and why". To run one in PyCharm: open the `.ipynb`, pick the project's `.venv` as the kernel (top right), click **Run All**. The setup cell adds the project root to the import path, so `from src.evaluate import ...` works from inside `notebooks/`.
 
 **Tests.** `python -m pytest` runs everything in `tests/`. `pytest.ini` puts the project root and `scripts/` on the import path. Current coverage: the build script, the portfolio rules on every page, the shape of every data file, and `src/evaluate.py` (sampling keeps class shares, splits don't overlap, scoring is repeatable and never changes the model passed in). The evaluate tests use a small made-up dataset, so they never download Covertype.
 
@@ -179,10 +181,19 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 
 Newest first. Every addition, removal or change goes here.
 
-### 2026-11-16: Numbered notebooks; notebook 01 for E-008
+### 2026-11-16: E-007 baseline steps in notebook 01
 
-**Added:** `notebooks/01_shared_scoring.ipynb` (walks through `src/evaluate.py` on the real data: full dataset, stratified sample, split, guessing versus a decision tree, repeatability). `scripts/make_nb_01.py` regenerates it.
-**Changed:** rule set that every item gets a numbered notebook; the site's Notebooks page now lists notebooks by number.
+**Added:** notebook 01 Steps 7 to 9: the baseline (default decision tree) scored on held-out and training plots, a per-cover-type table, and a confusion chart (matplotlib). `src/evaluate.py` gained `fit_predict()` and `cover_type_report()`; `tests/test_evaluate.py` gained 2 tests (suite now 28).
+
+**Decisions**
+- Show the training score next to the held-out score: the gap shows overfitting, which is what the evolution loop can fix.
+- Report recall and precision per cover type: overall accuracy is dominated by the two common types, and the rare types are where the loop has the most room to improve.
+- `cover_type_report()` lives in `src/` because notebooks 02 and 03 will compare evolved models against the baseline the same way.
+
+### 2026-11-16: Notebook 01 started (E-022); work reorganized around four notebooks
+
+**Added:** `notebooks/01_data_and_baseline.ipynb`, steps 1 to 6 (setup, full dataset, stratified sample, split, guessing versus a decision tree, repeatability). `scripts/make_nb_01.py` regenerates it.
+**Changed:** the project is organized around four notebooks (01 data and baseline, 02 evolution loop, 03 search race, 04 model collapse). Enhancements are the tasks that build each notebook and the site, grouped by notebook in Enhancements-and-Bugs.md. The site's Notebooks page lists the four notebooks.
 **Tested:** every cell run top to bottom here on stand-in data (this workspace can't download Covertype); real outputs appear when it is run in PyCharm.
 
 ### 2026-11-15: E-008 shared scoring (`src/evaluate.py`)

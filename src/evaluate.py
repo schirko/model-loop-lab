@@ -99,6 +99,38 @@ def make_split(
     return Split(X_train, X_test, y_train, y_test)
 
 
+def fit_predict(model, split: Split):
+    """Train a fresh copy of `model` on the training plots.
+
+    Returns the trained copy and its predictions for the held-out plots.
+    Use this when you need more than the single accuracy number.
+    """
+    fitted = clone(model).fit(split.X_train, split.y_train)
+    return fitted, pd.Series(fitted.predict(split.X_test), index=split.y_test.index)
+
+
+def cover_type_report(y_true: pd.Series, y_pred: pd.Series) -> pd.DataFrame:
+    """One row per cover type: how many held-out plots it has, how many the
+    model got right, and two rates.
+
+    * recall: of the plots that really are this type, the share the model found
+    * precision: of the plots the model called this type, the share that were right
+    """
+    rows = []
+    for code, name in COVER_TYPES.items():
+        actual = y_true == code
+        called = y_pred == code
+        hits = int((actual & called).sum())
+        rows.append({
+            "cover_type": name,
+            "plots": int(actual.sum()),
+            "correct": hits,
+            "recall": hits / actual.sum() if actual.sum() else float("nan"),
+            "precision": hits / called.sum() if called.sum() else float("nan"),
+        })
+    return pd.DataFrame(rows).set_index("cover_type")
+
+
 def evaluate(model, split: Split) -> float:
     """Train a fresh copy of `model` on the training plots and return its
     accuracy on the held-out plots (0 to 1).

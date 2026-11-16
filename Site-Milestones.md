@@ -18,7 +18,14 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 ## Notebooks
 
-Every enhancement gets its own notebook in `notebooks/`, numbered in the order the work is done (`01_`, `02_`, ...). The index lives in Enhancements-and-Bugs.md.
+The four notebooks are the heart of the project. Each milestone from M1 to M4 delivers one notebook; the enhancements that build each one are listed under it in Enhancements-and-Bugs.md.
+
+| # | Notebook | Milestone |
+|---|---|---|
+| 01 | `01_data_and_baseline.ipynb` | M1 |
+| 02 | `02_evolution_loop.ipynb` | M2 |
+| 03 | `03_search_race.ipynb` | M3 |
+| 04 | `04_model_collapse.ipynb` | M4 |
 
 ## Status key
 
@@ -32,10 +39,10 @@ Every enhancement gets its own notebook in `notebooks/`, numbered in the order t
 | # | Milestone | Status | Enhancement items |
 |---|---|---|---|
 | M0 | Project setup and front end | Done | E-001 to E-006 |
-| M1 | Baseline model and shared scoring | In progress (E-008 done) | E-007, E-008 |
-| M2 | The evolution loop | Planned | E-009, E-010 |
-| M3 | Racing Optuna and random guessing, and writing the findings | Planned | E-011, E-012 |
-| M4 | Model collapse experiment | Planned | E-013, E-014 |
+| M1 | Notebook 01: data and baseline | In progress | E-007, E-008, E-022 to E-024 |
+| M2 | Notebook 02: the evolution loop | Planned | E-009, E-010, E-025 |
+| M3 | Notebook 03: racing Optuna and random guessing | Planned | E-011, E-012, E-021 |
+| M4 | Notebook 04: model collapse | Planned | E-013, E-014 |
 | M5 | Notebooks published as site pages | Planned | E-015 |
 | M6 | Publish and add the portfolio card | In progress (live with sample data) | E-016, E-017, E-020 |
 | M7 | Live "run more generations" demo on the VPS (optional) | Planned | E-018 |
@@ -54,43 +61,45 @@ Every enhancement gets its own notebook in `notebooks/`, numbered in the order t
 
 **Done when:** pages build into `Schirko\scott\model-loop-lab`, tests pass, and the first commit is pushed.
 
-### M1. Baseline model and shared scoring
+### M1. Notebook 01: data and baseline
 
 **Why:** Every later number is judged against the baseline. A fixed sample and a fixed test set make results comparable across all experiments.
 
 **Plan:**
-- `src/evaluate.py`: shared loading, sample, split and scoring, with pytest tests (E-008, notebook `01_shared_scoring`) - done
-- Baseline: score a default decision tree and write it to the site (E-007, notebook `02_baseline`)
+- `src/evaluate.py`: shared loading, sample, split and scoring, with pytest tests (E-008) - done
+- Notebook 01 walkthrough of the data, sample, split and scoring (E-022) - done
+- Baseline steps: default decision tree, per-cover-type results (E-007) - done
+- Baseline saved to the site (E-023), notebook run on real data and notes written (E-024)
 
-**Done when:** the baseline accuracy is recorded and `evaluate.py` is tested.
+**Done when:** notebook 01 runs top to bottom in PyCharm and the site shows the real baseline.
 
-### M2. The evolution loop
+### M2. Notebook 02: the evolution loop
 
 **Why:** This is the core claim: a program improves models without a person choosing settings.
 
 **Plan:**
 - `src/evolve.py`: population of 10, keep top 3, mutate, 20 generations, fixed seed
-- A notebook that runs it and logs every model tried
+- `02_evolution_loop.ipynb` runs it and logs every model tried
 - Write `results/web/evolution.json` with `"sample": false` so the site switches to real data
 
 **Done when:** the generations chart and table on the site show real results.
 
-### M3. Racing Optuna and random guessing, and writing the findings
+### M3. Notebook 03: racing Optuna and random guessing
 
 **Why:** Improvement only matters if it beats simpler options. This is also where the "What it means" notes get written from real numbers.
 
 **Plan:**
-- A notebook that gives all three methods the same 200-model budget
+- `03_search_race.ipynb` gives all three methods the same 200-model budget
 - Write `results/web/search_compare.json`
 - Replace the "Written from the real run" placeholders on The loop works page
 
-### M4. Model collapse experiment
+### M4. Notebook 04: model collapse
 
 **Why:** Shows the limit of the idea, which is what separates this project from hype.
 
 **Plan:**
 - `src/collapse.py`: Gaussian mixture generator, 10 generations, classifier scored on real held-out data
-- A notebook that runs the collapse loop
+- `04_model_collapse.ipynb` runs the collapse loop
 - Write `results/web/collapse.json` and the "What it means" notes on Where loops break
 
 ### M5. Notebooks published as site pages
@@ -113,7 +122,8 @@ Every enhancement gets its own notebook in `notebooks/`, numbered in the order t
 
 | Date | Change |
 |---|---|
-| 2026-11-16 | Notebooks now numbered per item; notebook 01 (shared scoring) written. |
+| 2026-11-16 | E-007 done: baseline steps added to notebook 01. |
+| 2026-11-16 | Reorganized around four notebooks, one per milestone M1 to M4. Notebook 01 (data and baseline) started. |
 | 2026-11-15 | M1 started: `src/evaluate.py` done and tested. |
 | 2026-11-15 | Site live at schirko.com/scott/model-loop-lab with sample data, portfolio card added. |
 | 2026-11-15 | M0 done: first commit pushed to GitHub on `master`. |
