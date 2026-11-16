@@ -5,6 +5,14 @@ The working list for this project. Maintained by Claude. The next item to work o
 **Priority:** P1 needed now · P2 needed for the milestone · P3 nice to have
 **Status:** Open · In progress · Done · Won't do
 **Testing rule:** any Python written for an item gets pytest tests in `tests/`, and `python -m pytest` must pass before the item is marked Done.
+**Notebook rule:** every item gets its own Jupyter notebook in `notebooks/`, numbered in the order the work is done (`01_`, `02_`, `03_` ...). The notebook walks through the item's code, its results and a plain-language explanation (what we're looking for, how to read it, what it means, what's next and why). An item is not Done until its notebook runs top to bottom in PyCharm.
+
+## Notebook index
+
+| # | Notebook | Item | Status |
+|---|---|---|---|
+| 01 | `01_shared_scoring.ipynb` | E-008 | Written, run it in PyCharm |
+| 02 | `02_baseline.ipynb` | E-007 | Next |
 
 ## Bugs
 
@@ -27,13 +35,13 @@ None.
 
 | ID | Enhancement | Milestone | Priority | Status |
 |---|---|---|---|---|
-| E-007 | `notebooks/01_baseline.ipynb`: fixed 20,000-row sample, train/test split, default decision tree score | M1 | P1 | Open |
+| E-007 | Baseline: record the default decision tree's score and write it to the site (notebook 02) | M1 | P1 | Open |
 | E-009 | `src/evolve.py` evolution loop (population 10, keep 3, mutate, 20 generations), with pytest tests | M2 | P2 | Open |
-| E-010 | `notebooks/02_evolution_loop.ipynb` writes `results/web/evolution.json` | M2 | P2 | Open |
-| E-011 | `notebooks/03_optuna_compare.ipynb` writes `results/web/search_compare.json` | M3 | P2 | Open |
+| E-010 | Run the evolution loop and write `results/web/evolution.json` | M2 | P2 | Open |
+| E-011 | Race Optuna and random guessing, write `results/web/search_compare.json` | M3 | P2 | Open |
 | E-012 | Write the "What it means" notes on The loop works page from real results | M3 | P2 | Open |
 | E-013 | `src/collapse.py` model-collapse loop, with pytest tests | M4 | P2 | Open |
-| E-014 | `notebooks/04_model_collapse.ipynb` writes `results/web/collapse.json`, plus the "What it means" notes | M4 | P2 | Open |
+| E-014 | Run model collapse, write `results/web/collapse.json`, plus the "What it means" notes | M4 | P2 | Open |
 | E-015 | Export notebooks to HTML pages under `site/notebooks/` with back bar and noindex tag | M5 | P2 | Open |
 | E-021 | Change the portfolio card status from "In progress" once real results replace the sample data | M3 | P2 | Open |
 | E-018 | Live "run more generations" demo on the VPS | M7 | P3 | Open |
@@ -49,7 +57,7 @@ None.
 | E-004 | `scripts/build_site.py` publishes to `SITE_DIR` and overlays `results/web/*.json`, with pytest tests | M0 | 2026-11-15 |
 | E-005 | Light and dark mode, and phone-width layout | M0 | 2026-11-15 |
 | E-006 | First commit and push of the project repo (`master` branch, `.idea` untracked) | M0 | 2026-11-15 |
-| E-008 | `src/evaluate.py`: shared loading, fixed 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests | M1 | 2026-11-15 |
+| E-008 | `src/evaluate.py`: shared loading, fixed 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests; notebook 01 | M1 | 2026-11-16 |
 | E-020 | Sample-data version published to schirko.com/scott/model-loop-lab | M6 | 2026-11-15 |
 | E-016 | Portfolio screenshot `model-loop-lab.png` (made by the portfolio session) | M6 | 2026-11-15 |
 | E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | M6 | 2026-11-15 |
@@ -58,6 +66,7 @@ None.
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | Notebook rule added: every item gets a numbered notebook. Notebook 01 written for E-008. Open items no longer name notebook files; numbers are given when work starts. |
 | 2026-11-15 | E-008 done. Test suite now 26 tests. |
 | 2026-11-15 | Site published with sample data; portfolio card and screenshot added by the portfolio session (E-016, E-017, E-020). Added E-021. |
 | 2026-11-15 | E-006 done (first push). Publishing to the Schirko repo split out as E-020. |

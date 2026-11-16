@@ -76,8 +76,10 @@ model-loop-lab/
 │   ├── assets/charts.js          shared chart helpers (MLL.*)
 │   └── data/*.json               chart data: sample until real results replace it
 ├── scripts/build_site.py         publishes site/ into the portfolio folder
+├── scripts/make_nb_01.py         regenerates notebook 01 from code
 ├── tests/                        pytest tests
-├── notebooks/                    Jupyter notebooks (M1 onward)
+├── notebooks/                    one numbered notebook per item: 01_, 02_, ...
+│   └── 01_shared_scoring.ipynb   E-008 walkthrough
 ├── src/                          shared Python code
 │   ├── __init__.py               makes src importable (from src.evaluate import ...)
 │   └── evaluate.py               data loading, sample, split and scoring (M1)
@@ -167,6 +169,8 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 One seed (42) drives every random step, so rerunning a notebook gives the same numbers.
 
+**Notebooks.** Every item gets a notebook in `notebooks/`, numbered in the order the work is done. Each one: setup cell, then for every step a "What we're looking for" note, the code, its output, and "How to read it", "What it means", "What's next and why". To run one in PyCharm: open the `.ipynb`, pick the project's `.venv` as the kernel (top right), click **Run All**. The setup cell adds the project root to the import path, so `from src.evaluate import ...` works from inside `notebooks/`.
+
 **Tests.** `python -m pytest` runs everything in `tests/`. `pytest.ini` puts the project root and `scripts/` on the import path. Current coverage: the build script, the portfolio rules on every page, the shape of every data file, and `src/evaluate.py` (sampling keeps class shares, splits don't overlap, scoring is repeatable and never changes the model passed in). The evaluate tests use a small made-up dataset, so they never download Covertype.
 
 ---
@@ -174,6 +178,12 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-16: Numbered notebooks; notebook 01 for E-008
+
+**Added:** `notebooks/01_shared_scoring.ipynb` (walks through `src/evaluate.py` on the real data: full dataset, stratified sample, split, guessing versus a decision tree, repeatability). `scripts/make_nb_01.py` regenerates it.
+**Changed:** rule set that every item gets a numbered notebook; the site's Notebooks page now lists notebooks by number.
+**Tested:** every cell run top to bottom here on stand-in data (this workspace can't download Covertype); real outputs appear when it is run in PyCharm.
 
 ### 2026-11-15: E-008 shared scoring (`src/evaluate.py`)
 

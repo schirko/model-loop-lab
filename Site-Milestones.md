@@ -16,6 +16,10 @@ Two experiments:
 
 Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit-learn's `fetch_covtype`, sampled to 20,000 rows.
 
+## Notebooks
+
+Every enhancement gets its own notebook in `notebooks/`, numbered in the order the work is done (`01_`, `02_`, ...). The index lives in Enhancements-and-Bugs.md.
+
 ## Status key
 
 - **Done**: finished, tested and committed
@@ -55,9 +59,8 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 **Why:** Every later number is judged against the baseline. A fixed sample and a fixed test set make results comparable across all experiments.
 
 **Plan:**
-- `notebooks/01_baseline.ipynb`: load Covertype, take a fixed 20,000-row sample (fixed random seed), split train and held-out test, score a default decision tree
-- `src/evaluate.py`: one shared function that trains a model and returns test accuracy, used by every notebook
-- pytest tests for `src/evaluate.py`
+- `src/evaluate.py`: shared loading, sample, split and scoring, with pytest tests (E-008, notebook `01_shared_scoring`) - done
+- Baseline: score a default decision tree and write it to the site (E-007, notebook `02_baseline`)
 
 **Done when:** the baseline accuracy is recorded and `evaluate.py` is tested.
 
@@ -67,7 +70,7 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 **Plan:**
 - `src/evolve.py`: population of 10, keep top 3, mutate, 20 generations, fixed seed
-- `notebooks/02_evolution_loop.ipynb`: run it, log every model tried
+- A notebook that runs it and logs every model tried
 - Write `results/web/evolution.json` with `"sample": false` so the site switches to real data
 
 **Done when:** the generations chart and table on the site show real results.
@@ -77,7 +80,7 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 **Why:** Improvement only matters if it beats simpler options. This is also where the "What it means" notes get written from real numbers.
 
 **Plan:**
-- `notebooks/03_optuna_compare.ipynb`: same 200-model budget for all three methods
+- A notebook that gives all three methods the same 200-model budget
 - Write `results/web/search_compare.json`
 - Replace the "Written from the real run" placeholders on The loop works page
 
@@ -87,7 +90,7 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 **Plan:**
 - `src/collapse.py`: Gaussian mixture generator, 10 generations, classifier scored on real held-out data
-- `notebooks/04_model_collapse.ipynb`
+- A notebook that runs the collapse loop
 - Write `results/web/collapse.json` and the "What it means" notes on Where loops break
 
 ### M5. Notebooks published as site pages
@@ -110,6 +113,7 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | Notebooks now numbered per item; notebook 01 (shared scoring) written. |
 | 2026-11-15 | M1 started: `src/evaluate.py` done and tested. |
 | 2026-11-15 | Site live at schirko.com/scott/model-loop-lab with sample data, portfolio card added. |
 | 2026-11-15 | M0 done: first commit pushed to GitHub on `master`. |

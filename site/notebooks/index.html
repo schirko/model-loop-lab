@@ -39,14 +39,16 @@
 <main class="mll-wrap">
   <section class="mll-hero">
     <h1>The notebooks</h1>
-    <p class="mll-lede">Every chart on this site comes from one of these Jupyter notebooks. Each one shows the code, its output, and a plain-language reading of what the output means.</p>
+    <p class="mll-lede">Every step of this project has its own Jupyter notebook, numbered in the order the work was done. Each one shows the code, its output, and a plain-language reading of what the output means.</p>
   </section>
 
   <section>
     <h2>In order</h2>
     <ul class="mll-nblist">
-      <li><h3>Baseline: one plain model</h3><span class="mll-status">Planned</span>
-        <p>Loads the Colorado forest data, sets aside the held-out plots, and scores a default decision tree. Every later result is measured against this number.</p></li>
+      <li><h3>01. Shared data loading and scoring</h3><span class="mll-status is-done">Written</span>
+        <p>Loads the Colorado forest data, takes a 20,000-plot sample that keeps every cover type's share, holds back 5,000 plots for testing, and checks the scoring is fair and repeatable.</p></li>
+      <li><h3>02. Baseline: one plain model</h3><span class="mll-status">Next</span>
+        <p>Scores a default decision tree on the held-out plots. Every later result is measured against this number.</p></li>
       <li><h3>The evolution loop</h3><span class="mll-status">Planned</span>
         <p>Builds the build, score, keep, change loop by hand and runs it for 20 generations, logging every model it tries.</p></li>
       <li><h3>Racing the loop against Optuna and random guessing</h3><span class="mll-status">Planned</span>
