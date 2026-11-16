@@ -183,6 +183,11 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 
 Newest first. Every addition, removal or change goes here.
 
+### 2026-11-16: First real run of notebook 01; B-005 fixed
+
+**Result:** first run on the real Covertype data: baseline 77.18% on held-out plots, 100% on training plots (33 levels, 2,341 leaves); guessing the most common type scores 48.8%.
+**Fixed:** B-005, Step 8 used pandas `.style`, which needs the `jinja2` package. The table now formats recall and precision as text, so no extra package is needed.
+
 ### 2026-11-16: E-023 baseline saved for the site
 
 **Added:** `src/web_results.py` (`save_web_result()`), `tests/test_web_results.py` (4 tests), `site/data/baseline.json` (sample stand-in), notebook 01 Step 10, a baseline shape test in `tests/test_site_pages.py` (suite now 33).
