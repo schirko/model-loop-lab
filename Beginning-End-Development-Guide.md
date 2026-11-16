@@ -57,7 +57,7 @@ Follow these in order. Each step says which milestone added it.
 
 ```
 git init
-git branch -M main
+git branch -M master
 git remote add origin https://github.com/schirko/model-loop-lab.git
 ```
 
@@ -78,7 +78,9 @@ model-loop-lab/
 ├── scripts/build_site.py         publishes site/ into the portfolio folder
 ├── tests/                        pytest tests
 ├── notebooks/                    Jupyter notebooks (M1 onward)
-├── src/                          shared Python code (M1 onward)
+├── src/                          shared Python code
+│   ├── __init__.py               makes src importable (from src.evaluate import ...)
+│   └── evaluate.py               data loading, sample, split and scoring (M1)
 ├── results/web/                  real chart data written by notebooks
 ├── data/                         downloaded data, not committed
 ├── .env.example                  copy to .env and set SITE_DIR
@@ -121,7 +123,7 @@ Project repo, from `B:\_Dev\Python\model-loop-lab`:
 ```
 git add .
 git commit -m "Describe the change"
-git push -u origin main
+git push -u origin master
 ```
 
 Portfolio repo, from `B:\_Dev\Python\Schirko`, then redeploy in Coolify:
@@ -154,13 +156,40 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 `tests/test_site_pages.py` checks these shapes, so a notebook that writes a bad file fails the tests.
 
-**Tests.** `python -m pytest` runs everything in `tests/`. Current coverage: the build script, the portfolio rules on every page, and the shape of every data file.
+**Shared scoring (`src/evaluate.py`).** Every experiment loads and scores data through this one file, so all numbers on the site are comparable:
+
+| Function | What it does |
+|---|---|
+| `load_covertype()` | Downloads Covertype once into `data/` (about 11 MB), then returns a 20,000-plot sample, stratified so every cover type keeps its share |
+| `make_split(X, y)` | 75% training plots, 25% held-out test plots, stratified, seed 42 |
+| `evaluate(model, split)` | Trains a fresh copy of the model and returns accuracy on the held-out plots |
+| `COVER_TYPES` | Names for cover types 1 to 7 (Spruce/fir, Lodgepole pine, ...) |
+
+One seed (42) drives every random step, so rerunning a notebook gives the same numbers.
+
+**Tests.** `python -m pytest` runs everything in `tests/`. `pytest.ini` puts the project root and `scripts/` on the import path. Current coverage: the build script, the portfolio rules on every page, the shape of every data file, and `src/evaluate.py` (sampling keeps class shares, splits don't overlap, scoring is repeatable and never changes the model passed in). The evaluate tests use a small made-up dataset, so they never download Covertype.
 
 ---
 
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-15: E-008 shared scoring (`src/evaluate.py`)
+
+**Added:** `src/__init__.py`, `src/evaluate.py`, `tests/test_evaluate.py` (10 tests; suite now 26).
+**Changed:** `pytest.ini` now puts the project root on the path (`pythonpath = . scripts`) so tests import `src.evaluate`.
+**Removed:** `src/.gitkeep` (the folder now has real files).
+
+**Decisions**
+- Stratified 20,000-plot sample: Cottonwood/willow is under 0.5% of plots, and a plain random sample could leave it with almost none.
+- `evaluate()` trains a clone of the model: scoring the same settings twice gives the same answer, and nothing carries over between runs. The evolution loop depends on this.
+- Accuracy as the score: easy to explain on the site ("correct on 86 of every 100 plots"). Per-class results can be added later if the rare cover types turn out to matter.
+
+### 2026-11-15: First publish (sample data)
+
+- Built into `Schirko\scott\model-loop-lab` and pushed with the Schirko repo; Coolify redeployed. Live at https://schirko.com/scott/model-loop-lab/.
+- The portfolio session added the card (Data Science Projects, status "In progress") and the screenshot `scott/images/screenshots/model-loop-lab.png`. Neither file belongs to this project; changes to them go through the portfolio session.
 
 ### 2026-11-15: M0 project setup and front end
 
@@ -177,5 +206,7 @@ Newest first. Every addition, removal or change goes here.
 - Static HTML site under schirko.com/scott instead of a Streamlit app: no extra server, matches Meat Price Explorer, follows the portfolio's "Adding a project" guide.
 - Plotly basic bundle 2.35.3 from cdnjs: the full bundle is several times larger and only line and bar charts are needed.
 - Charts read JSON files instead of having numbers written into the pages, so notebooks can update the site without anyone editing HTML.
+
+**Committed:** first push to `schirko/model-loop-lab` on the `master` branch. PyCharm's `.idea` folder was untracked (`git rm -r --cached .idea`) and is ignored from then on.
 
 **Fixed during the render check:** B-001 to B-004 (see Enhancements-and-Bugs.md).

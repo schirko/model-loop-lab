@@ -27,13 +27,13 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 | # | Milestone | Status | Enhancement items |
 |---|---|---|---|
-| M0 | Project setup and front end | Done (waiting on first commit) | E-001 to E-006 |
-| M1 | Baseline model and shared scoring | Next | E-007, E-008 |
+| M0 | Project setup and front end | Done | E-001 to E-006 |
+| M1 | Baseline model and shared scoring | In progress (E-008 done) | E-007, E-008 |
 | M2 | The evolution loop | Planned | E-009, E-010 |
 | M3 | Racing Optuna and random guessing, and writing the findings | Planned | E-011, E-012 |
 | M4 | Model collapse experiment | Planned | E-013, E-014 |
 | M5 | Notebooks published as site pages | Planned | E-015 |
-| M6 | Publish and add the portfolio card | Planned | E-016, E-017 |
+| M6 | Publish and add the portfolio card | In progress (live with sample data) | E-016, E-017, E-020 |
 | M7 | Live "run more generations" demo on the VPS (optional) | Planned | E-018 |
 
 ### M0. Project setup and front end
@@ -110,4 +110,7 @@ Data: Forest Covertype (Roosevelt National Forest, Colorado), loaded with scikit
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | M1 started: `src/evaluate.py` done and tested. |
+| 2026-11-15 | Site live at schirko.com/scott/model-loop-lab with sample data, portfolio card added. |
+| 2026-11-15 | M0 done: first commit pushed to GitHub on `master`. |
 | 2026-11-15 | Created. Plan moved from a Streamlit app to a static HTML site published under schirko.com/scott. M0 front end built. |

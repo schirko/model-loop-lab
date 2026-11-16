@@ -27,9 +27,7 @@ None.
 
 | ID | Enhancement | Milestone | Priority | Status |
 |---|---|---|---|---|
-| E-006 | First commit of the project repo, and first publish into the Schirko repo | M0 | P1 | Open |
 | E-007 | `notebooks/01_baseline.ipynb`: fixed 20,000-row sample, train/test split, default decision tree score | M1 | P1 | Open |
-| E-008 | `src/evaluate.py` shared scoring function, with pytest tests | M1 | P1 | Open |
 | E-009 | `src/evolve.py` evolution loop (population 10, keep 3, mutate, 20 generations), with pytest tests | M2 | P2 | Open |
 | E-010 | `notebooks/02_evolution_loop.ipynb` writes `results/web/evolution.json` | M2 | P2 | Open |
 | E-011 | `notebooks/03_optuna_compare.ipynb` writes `results/web/search_compare.json` | M3 | P2 | Open |
@@ -37,8 +35,7 @@ None.
 | E-013 | `src/collapse.py` model-collapse loop, with pytest tests | M4 | P2 | Open |
 | E-014 | `notebooks/04_model_collapse.ipynb` writes `results/web/collapse.json`, plus the "What it means" notes | M4 | P2 | Open |
 | E-015 | Export notebooks to HTML pages under `site/notebooks/` with back bar and noindex tag | M5 | P2 | Open |
-| E-016 | Portfolio screenshot `model-loop-lab.png`, 16:9, into `scott/images/screenshots/` | M6 | P2 | Open |
-| E-017 | Send card details to the portfolio session (name, section, status, URLs, description, tags) | M6 | P2 | Open |
+| E-021 | Change the portfolio card status from "In progress" once real results replace the sample data | M3 | P2 | Open |
 | E-018 | Live "run more generations" demo on the VPS | M7 | P3 | Open |
 | E-019 | Host the Plotly script and fonts locally instead of from cdnjs and Google Fonts, if the portfolio ever needs no outside requests | — | P3 | Open |
 
@@ -51,9 +48,17 @@ None.
 | E-003 | Plotly charts drawn from `site/data/*.json`, with a "Sample data" notice that turns off when real results arrive | M0 | 2026-11-15 |
 | E-004 | `scripts/build_site.py` publishes to `SITE_DIR` and overlays `results/web/*.json`, with pytest tests | M0 | 2026-11-15 |
 | E-005 | Light and dark mode, and phone-width layout | M0 | 2026-11-15 |
+| E-006 | First commit and push of the project repo (`master` branch, `.idea` untracked) | M0 | 2026-11-15 |
+| E-008 | `src/evaluate.py`: shared loading, fixed 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests | M1 | 2026-11-15 |
+| E-020 | Sample-data version published to schirko.com/scott/model-loop-lab | M6 | 2026-11-15 |
+| E-016 | Portfolio screenshot `model-loop-lab.png` (made by the portfolio session) | M6 | 2026-11-15 |
+| E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | M6 | 2026-11-15 |
 
 ## Change history
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | E-008 done. Test suite now 26 tests. |
+| 2026-11-15 | Site published with sample data; portfolio card and screenshot added by the portfolio session (E-016, E-017, E-020). Added E-021. |
+| 2026-11-15 | E-006 done (first push). Publishing to the Schirko repo split out as E-020. |
 | 2026-11-15 | Created with the M0 front end. B-001 to B-004 found and fixed during the first render check. |
