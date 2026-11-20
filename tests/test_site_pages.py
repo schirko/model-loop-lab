@@ -57,3 +57,37 @@ def test_baseline_data_shape():
     d = load("baseline")
     assert {"sample", "label", "score", "train_score"} <= d.keys()
     assert 0 < d["score"] <= d["train_score"] <= 1
+
+
+
+def test_overview_quotes_the_saved_baseline():
+    """The overview's baseline must match notebook 01's saved result, when it exists."""
+    saved = SITE.parent / "results" / "web" / "baseline.json"
+    if not saved.exists():
+        pytest.skip("notebook 01 has not saved its baseline yet")
+    score = json.loads(saved.read_text(encoding="utf-8"))["score"]
+    page = (SITE / "index.html").read_text(encoding="utf-8")
+    assert f"{score:.1%}" in page, f"overview should quote the saved baseline {score:.1%}"
+
+
+def test_overview_has_no_sample_numbers():
+    """The overview shows real results only; sample data stays on the experiment pages."""
+    page = (SITE / "index.html").read_text(encoding="utf-8")
+    assert "data-sample-for" not in page
+    assert "86.7%" not in page and "46.0%" not in page
+
+
+
+def test_overview_presentation_matches_the_deck():
+    """The overview's slide count and download sizes must match the published deck."""
+    info_path = SITE / "presentation" / "deck.json"
+    if not info_path.exists():
+        pytest.skip("presentation not built yet")
+    info = json.loads(info_path.read_text(encoding="utf-8"))
+    page = (SITE / "index.html").read_text(encoding="utf-8")
+    assert f"{info['slides']} slides" in page
+    for size in info["sizes"].values():
+        assert size in page, f"overview should show the file size {size}"
+    for name in ["cover.png", "model-loop-lab-story.pdf", "model-loop-lab-story.pptx",
+                 "model-loop-lab-story.html", "model-loop-lab-story-slides.zip"]:
+        assert (SITE / "presentation" / name).exists(), name

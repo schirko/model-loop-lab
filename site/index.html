@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Model Loop Lab</title>
-<meta name="description" content="Can AI build better AI? A model-search loop on Colorado forest data, measured generation by generation, and the loop that breaks when models learn only from other models.">
+<meta name="description" content="Can AI build better AI? A model-building loop on Colorado forest data, measured step by step in four notebooks, and a loop that breaks when models learn only from other models.">
 <link rel="stylesheet" href="/scott/backbar.css">
 <link rel="icon" href="/scott/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" sizes="16x16" href="/scott/favicon-16.png">
@@ -37,56 +37,167 @@
 </nav>
 
 <main class="mll-wrap">
-  <section class="mll-hero">
+  <header class="mll-hero mll-hero-page">
+    <p class="mll-eyebrow">DATA SCIENCE PROJECT · COLORADO FOREST COVER, 581,012 PLOTS</p>
     <h1>Can AI build better AI?</h1>
-    <p class="mll-lede">A program builds ten models, scores them, keeps the best three, changes them a little, and goes again. This project runs that loop on Colorado forest data, measures how much each generation improves, and then shows a loop that gets worse instead.</p>
-    <p><span class="mll-pending" data-sample-for="evolution" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Sample data: real results arrive with milestone 2</span></p>
-    <div class="mll-strip" id="strip" role="img" aria-label="Best test accuracy for each of 20 generations"></div>
-    <div class="mll-strip-axis"><span>Generation 1</span><span>Best accuracy each generation</span><span id="strip-last">Generation 20</span></div>
-  </section>
-
-  <section>
-    <div class="mll-chart-head">
-      <h2>What the loop achieved</h2>
-      <span class="mll-pending" id="figs-sample" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><span id="figs-sample-text">Sample data</span></span>
+    <p class="mll-lede">A program that builds forest-cover models, tests them on Colorado forest plots they have never seen, keeps the best and improves them, with no person choosing the settings. Then a second loop where models learn only from data other models made up, to see where the idea breaks. Built from free public data and worked through in four notebooks.</p>
+    <div class="mll-btns">
+      <a class="mll-btn mll-btn-primary" href="#findings">Key findings</a>
+      <a class="mll-btn" href="#presentation">The presentation</a>
+      <a class="mll-btn" href="#analysis">Read the analysis</a>
+      <a class="mll-btn" href="/scott/model-loop-lab/docs/FINDINGS.html">Findings explained</a>
+      <a class="mll-btn" href="https://github.com/schirko/model-loop-lab">View code on GitHub</a>
     </div>
-    <p>Every model is scored on forest plots it never trained on. The starting point is a plain decision tree with default settings, so each gain is measured against something real.</p>
-    <ul class="mll-figures">
-      <li><strong id="fig-baseline">–</strong><span>Starting accuracy, default decision tree</span></li>
-      <li><strong id="fig-best">–</strong><span>Best accuracy after the loop</span></li>
-      <li><strong id="fig-gens">–</strong><span>Generations run</span></li>
-      <li><strong id="fig-collapse">–</strong><span>Accuracy after 10 rounds of training on its own output</span></li>
+    <p class="mll-byline">By Scott Schirkofsky · Notebook 01 of 4 finished; this page grows as each notebook is completed.</p>
+
+    <ul class="mll-stats" aria-label="Headline numbers">
+      <li><strong>77.2%</strong><span>The baseline: a plain decision tree, right on plots it never saw. The number to beat.</span></li>
+      <li><strong>48.8%</strong><span>Always guessing the most common tree. The map features are worth 28 points.</span></li>
+      <li><strong>100%</strong><span>The same tree on its own training plots. It memorized them: overfitting.</span></li>
+      <li><strong>44%</strong><span>Of Aspen plots found. Its look-alike, Lodgepole pine, takes the rest.</span></li>
     </ul>
+
+    <figure class="mll-figure mll-panel">
+      <img src="/scott/model-loop-lab/images/baseline_scores.png" alt="Bar chart: always guessing Lodgepole pine scores 48.8%, a plain decision tree scores 77.2% on held-out plots and 100% on its own training plots." onerror="this.closest('figure').hidden=true">
+      <figcaption>The starting point. A plain decision tree beats guessing by 28 points, but it scores 100% on the plots it learned from and 77.2% on plots it never saw: it memorized. Closing that gap is the loop's first job.</figcaption>
+    </figure>
+  </header>
+
+  <section class="mll-panel" aria-labelledby="plain">
+    <h2 id="plain">The project in plain English</h2>
+    <p><strong>The question.</strong> New AI systems are increasingly built with help from older ones. Can a program design, test and improve its own models, and does it get better each round? And what happens when models learn from data that other models made up instead of from the real world?</p>
+    <p><strong>The data.</strong> 581,012 plots of the Roosevelt National Forest in northern Colorado, each a square about 30 meters on a side, described only by map measurements: elevation, slope, distance to water, roads and past fires, wilderness area and soil type. The job is to say which of seven tree covers grows there, such as Spruce/fir or Lodgepole pine.</p>
+    <p><strong>What we know so far.</strong> A plain decision tree with no tuning gets <strong>77.2%</strong> of plots right that it has never seen, against 48.8% for always guessing the most common tree. It memorizes its training plots (100% on those) and mixes up neighbors: trees that grow at the same elevations on the same soils. That 77.2% is the number every later model has to beat.</p>
+    <p><strong>What comes next.</strong> Notebook 02 runs the improvement loop for 20 generations. Notebook 03 races it against Optuna, a standard tuning tool, and against random guessing. Notebook 04 runs the copy-of-a-copy loop and measures what is lost. Their findings will be added here as each one is finished.</p>
   </section>
 
-  <section>
-    <h2>Two experiments</h2>
-    <div class="mll-chapters">
-      <a class="mll-chapter" href="/scott/model-loop-lab/loop/">
-        <h3>The loop works</h3>
-        <p>An evolutionary search breeds better model settings over 20 generations. It is then raced against Optuna, a standard tuning library, and plain random guessing.</p>
-        <span class="mll-go">See the improvement loop</span>
-      </a>
-      <a class="mll-chapter" href="/scott/model-loop-lab/collapse/">
-        <h3>Where loops break</h3>
-        <p>A model learns the data, writes new data, and the next model learns only from that. After a few rounds the data loses its variety and accuracy on real forest plots falls.</p>
-        <span class="mll-go">See the collapse</span>
-      </a>
+  <section aria-labelledby="findings">
+    <h2 id="findings">Key findings so far</h2>
+    <ul class="mll-findings">
+      <li><strong>Map measurements carry real information.</strong> A plain decision tree is right on 77.2% of held-out plots; always guessing Lodgepole pine is right on 48.8%. The 28-point gap is what elevation, soil and the rest are worth. <span class="mll-src">Notebook 01, Step 5</span></li>
+      <li><strong>The plain tree memorized its training plots.</strong> It scores 100% on the 15,000 plots it learned from, by asking up to 33 yes/no questions and ending in 2,341 final answers, about one for every six training plots. On new plots it is wrong 1,141 times out of 5,000. That 23-point gap is overfitting. <span class="mll-src">Notebook 01, Step 7</span></li>
+      <li><strong>The common trees are fine; Aspen and Douglas-fir are not.</strong> The tree finds 80% of Lodgepole pine and 77% of Spruce/fir plots, but only 52% of Douglas-fir and 44% of Aspen. <span class="mll-src">Notebook 01, Step 8</span></li>
+      <li><strong>The mistakes are between neighbors.</strong> 21% of Spruce/fir plots are called Lodgepole pine and 16% of Lodgepole pine are called Spruce/fir; because those two are 85% of the forest, that pair causes most of the errors. Aspen is called Lodgepole pine 44% of the time. Krummholz, rare but with only one look-alike, does well. <span class="mll-src">Notebook 01, Step 9</span></li>
+      <li><strong>Rarity alone doesn't explain the weak spots.</strong> Krummholz has only 177 held-out plots yet is found 77% of the time, as often as the common types. What hurts a cover type is having a look-alike neighbor, not just being rare. <span class="mll-src">Notebook 01, Steps 8 and 9</span></li>
+    </ul>
+    <p class="mll-note">Findings from notebooks 02 to 04 (how far the loop climbs, how it compares with Optuna, and what model collapse costs) will be added here as each notebook is finished.</p>
+
+    <div class="mll-figgrid">
+      <figure class="mll-figure">
+        <img src="/scott/model-loop-lab/images/cover_types.png" alt="Horizontal bar chart of the seven cover types' share of all plots: Lodgepole pine 48.8%, Spruce/fir 36.5%, then five small types." onerror="this.closest('figure').hidden=true">
+        <figcaption>Two cover types make up 85% of the forest. Cottonwood/willow is under half a percent.</figcaption>
+      </figure>
+      <figure class="mll-figure">
+        <img src="/scott/model-loop-lab/images/cover_type_recall.png" alt="Horizontal bar chart of the share of each cover type the plain tree found, from Lodgepole pine at 80% down to Aspen at 44%." onerror="this.closest('figure').hidden=true">
+        <figcaption>The share of each cover type the plain tree found. Amber bars fall below its overall 77.2%.</figcaption>
+      </figure>
+      <figure class="mll-figure">
+        <img src="/scott/model-loop-lab/images/elevation_by_type.png" alt="Box plot of elevation for each cover type, forming a ladder from Cottonwood/willow at the lowest elevations to Krummholz at treeline, with neighboring types overlapping." onerror="this.closest('figure').hidden=true">
+        <figcaption>Cover types form a ladder up the mountain. Where neighbors' elevation ranges overlap, elevation alone can't tell them apart.</figcaption>
+      </figure>
+      <figure class="mll-figure">
+        <img src="/scott/model-loop-lab/images/confusion.png" alt="Seven by seven grid showing, for each real cover type, the share of plots the tree gave each answer. The darkest off-diagonal squares are Spruce/fir and Lodgepole pine confused with each other and Aspen called Lodgepole pine." onerror="this.closest('figure').hidden=true">
+        <figcaption>Read across a row: for the plots that really are that cover type, the share the tree gave each answer. The diagonal is right answers; the dark squares off it are neighbors being mixed up.</figcaption>
+      </figure>
     </div>
   </section>
 
-  <section>
-    <h2>The data</h2>
-    <p>The Forest Covertype dataset comes from the Roosevelt National Forest in northern Colorado. Each row is a 30 by 30 meter plot described by map features: elevation, slope, aspect, distance to water, roads and past fire points, wilderness area and soil type. The label is which of seven tree covers grows there, such as spruce-fir or lodgepole pine.</p>
-    <p>The full set has about 581,000 plots. The loops use a fixed sample of 20,000 so each generation trains in seconds, with a separate held-out set for every score shown on this site.</p>
-    <p class="mll-small">Source: Blackard and Dean, U.S. Forest Service and Colorado State University, via the UCI Machine Learning Repository and scikit-learn's <code>fetch_covtype</code>.</p>
+  <section aria-labelledby="presentation">
+    <h2 id="presentation">The story, as a presentation</h2>
+    <div class="mll-deck">
+      <a class="mll-deck-thumb" href="/scott/model-loop-lab/presentation/model-loop-lab-story.html" target="_blank" rel="noopener">
+        <img src="/scott/model-loop-lab/presentation/cover.png" alt="Cover slide: Can AI build better AI?">
+        <span>13 slides</span>
+      </a>
+      <div>
+        <p class="mll-note mll-deck-text">The project so far, told as a 13-slide story with full speaker notes: the question, the four notebooks, and every step of notebook 01, from the forest data to the 77.2% baseline and where it goes wrong. Slides are added as each notebook is finished.</p>
+        <a class="mll-btn mll-btn-primary" href="/scott/model-loop-lab/presentation/model-loop-lab-story.html" target="_blank" rel="noopener">View the presentation</a>
+        <div class="mll-dls">
+          <a class="mll-dl" href="/scott/model-loop-lab/presentation/model-loop-lab-story.pdf" download><span class="mll-ext">PDF</span><span><b>PDF</b><small>For reading or printing · 213 KB</small></span></a>
+          <a class="mll-dl" href="/scott/model-loop-lab/presentation/model-loop-lab-story.pptx" download><span class="mll-ext">PPTX</span><span><b>PowerPoint</b><small>Editable, with speaker notes · 150 KB</small></span></a>
+          <a class="mll-dl" href="/scott/model-loop-lab/presentation/model-loop-lab-story.html" download><span class="mll-ext">HTML</span><span><b>Web page</b><small>One file, works offline · 2.7 MB</small></span></a>
+          <a class="mll-dl" href="/scott/model-loop-lab/presentation/model-loop-lab-story-slides.zip" download><span class="mll-ext">ZIP</span><span><b>Slide images</b><small>Every slide as a PNG, zipped · 1.9 MB</small></span></a>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section>
-    <h2>How it was built</h2>
-    <p>Python with pandas, scikit-learn and Optuna. Each step is worked through in a Jupyter notebook, with the result and a plain-language reading under every chart. The notebooks write small results files, and this site draws its charts from them.</p>
-    <p><a href="/scott/model-loop-lab/notebooks/">Read the notebooks</a></p>
-    <p><a href="https://github.com/schirko/model-loop-lab">View the code on GitHub</a></p>
+  <section aria-labelledby="words">
+    <h2 id="words">Words used on this page</h2>
+    <div class="mll-table-wrap">
+      <table class="mll-table mll-words">
+        <thead><tr><th>Word</th><th>What it means here</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Model</strong></td><td>A set of rules learned from data that turns a plot's map measurements into a guess of which trees grow there.</td></tr>
+          <tr><td><strong>Decision tree</strong></td><td>A model that asks a chain of yes/no questions ("Is the elevation above 3,000 m?") until it reaches an answer.</td></tr>
+          <tr><td><strong>Accuracy</strong></td><td>The share of plots the model labels correctly.</td></tr>
+          <tr><td><strong>Held-out plots</strong></td><td>5,000 plots set aside and never shown to a model while it learns. Every score on this site comes from these same plots.</td></tr>
+          <tr><td><strong>Baseline</strong></td><td>The score of a plain model with no tuning: the number to beat. Here, 77.2%.</td></tr>
+          <tr><td><strong>Overfitting</strong></td><td>Memorizing the training plots instead of learning patterns that carry over to new ones.</td></tr>
+          <tr><td><strong>Recall</strong></td><td>Of the plots that really are a given cover type, the share the model found.</td></tr>
+          <tr><td><strong>Generation</strong></td><td>One round of the improvement loop: build several models, score them, keep the best.</td></tr>
+          <tr><td><strong>Synthetic data</strong></td><td>Made-up data produced by a model, meant to look like the real thing.</td></tr>
+          <tr><td><strong>Model collapse</strong></td><td>What happens when models learn only from earlier models' made-up data and lose touch with the real data.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="how">
+    <h2 id="how">How it was done</h2>
+    <ol class="mll-howto">
+      <li><strong>Collected</strong> the Forest Covertype data (U.S. Forest Service and Colorado State University) with scikit-learn's <code>fetch_covtype</code>: 581,012 plots, 54 map features, 7 cover types.</li>
+      <li><strong>Sampled and split</strong> it fairly: 20,000 plots drawn so every cover type keeps its exact share, then 15,000 for training and 5,000 held out, with no plot on both sides. One random seed (42) drives every step, so every result repeats exactly.</li>
+      <li><strong>Scored</strong> every model the same way, through one shared function: train a fresh copy, then measure accuracy on the same 5,000 held-out plots.</li>
+      <li><strong>Measured the baseline:</strong> a plain decision tree, against guessing and against its own training plots, broken down by cover type and by which cover types get confused.</li>
+      <li><strong>Tested.</strong> 44 automated tests check the sampling, the split, the scoring, the files the site reads, that every page carries the portfolio's back bar and noindex tag, and that this page quotes the same baseline as the saved results. They run on every change.</li>
+      <li><strong>Published</strong> this site from the notebooks' saved results with one script, so every number and chart matches the latest run, and each finished notebook appears as a web page.</li>
+    </ol>
+    <p class="mll-note"><strong>Limits.</strong> One dataset, from one forest. Accuracy is a single overall score, so the rare cover types count for little in it; the per-cover-type results are there to show what it hides. The loops are small versions of the real thing, built to show the mechanism, not the scale of large AI systems.</p>
+  </section>
+
+  <section aria-labelledby="analysis">
+    <h2 id="analysis">The analysis, step by step</h2>
+    <p>Four notebooks walk through the whole project in order, written for a reader who is smart but not necessarily an analyst. Each step follows the same pattern: what we're looking for, the code and its result, how to read it, what it means, and what's next and why.</p>
+    <ol class="mll-cards">
+      <li>
+        <a class="mll-card" href="/scott/model-loop-lab/notebooks/01_data_and_baseline.html">
+          <span class="mll-card-title">The data, and how good a plain model is</span>
+          <span class="mll-card-text">The forest data and its lopsided cover types, a fair sample and split, guessing against a plain tree, the 77.2% baseline, overfitting, and which trees get confused with which. Ten steps.</span>
+          <span class="mll-card-status is-done">Read it</span>
+        </a>
+      </li>
+      <li>
+        <div class="mll-card">
+          <span class="mll-card-title">The evolution loop: can a program find better models on its own?</span>
+          <span class="mll-card-text">Build ten models, keep the best three, change them a little, repeat for 20 generations. How far it climbs above 77.2%, which settings win, and whether it fixes the overfitting and the neighbor mix-ups.</span>
+          <span class="mll-card-status">In progress</span>
+        </div>
+      </li>
+      <li>
+        <div class="mll-card">
+          <span class="mll-card-title">The search race: is the loop better than the alternatives?</span>
+          <span class="mll-card-text">The loop, Optuna and random guessing each get the same 200 tries on the same plots. Who finds a good model first, and who ends highest.</span>
+          <span class="mll-card-status">Planned</span>
+        </div>
+      </li>
+      <li>
+        <div class="mll-card">
+          <span class="mll-card-title">Model collapse: what happens when models learn only from other models?</span>
+          <span class="mll-card-text">Each generation learns only from data the previous one made up. How accuracy on real plots and the variety in the data drain away, and which trees vanish first.</span>
+          <span class="mll-card-status">Planned</span>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="more">
+    <h2 id="more">More</h2>
+    <ul class="mll-more">
+      <li><a href="/scott/model-loop-lab/docs/FINDINGS.html">Findings explained</a>: every conclusion so far, with the numbers behind it</li>
+      <li><a href="/scott/model-loop-lab/loop/">The loop works</a> and <a href="/scott/model-loop-lab/collapse/">Where loops break</a>: the experiment pages, showing sample data until notebooks 02 to 04 are finished</li>
+      <li><a href="https://github.com/schirko/model-loop-lab">The code</a>: notebooks, shared Python code and tests on GitHub</li>
+    </ul>
   </section>
 </main>
 
@@ -95,46 +206,5 @@
     <p>Model Loop Lab by Scott Schirkofsky. Part of my <a href="/scott/">project portfolio</a>.</p>
   </div>
 </footer>
-
-<script src="/scott/model-loop-lab/assets/charts.js"></script>
-<script>
-(async function () {
-  const samples = [];
-  let evo = null;
-  try { evo = await MLL.load("evolution"); MLL.markSample("evolution", evo.sample); } catch (e) { console.error(e); }
-  const base = await MLL.baseline(evo);
-  if (base) {
-    document.getElementById("fig-baseline").textContent = MLL.pct(base.score);
-    if (base.sample) samples.push("starting accuracy");
-  }
-  if (evo) {
-    const gens = evo.generations;
-    const scores = gens.map((g) => g.best);
-    const lo = Math.min(evo.baseline.score, ...scores) - 0.01, hi = Math.max(...scores);
-    const strip = document.getElementById("strip");
-    strip.style.gridTemplateColumns = "repeat(" + gens.length + ", 1fr)";
-    strip.innerHTML = gens.map((g, i) => {
-      const h = 12 + 88 * (g.best - lo) / (hi - lo);
-      return '<span style="--h:' + h.toFixed(1) + '%;--i:' + i + '" title="Generation ' + g.gen + ': ' + MLL.pct(g.best) + '"></span>';
-    }).join("");
-    document.getElementById("strip-last").textContent = "Generation " + gens[gens.length - 1].gen;
-    document.getElementById("fig-best").textContent = MLL.pct(Math.max(...scores));
-    document.getElementById("fig-gens").textContent = gens.length;
-    if (evo.sample) samples.push("loop results");
-  }
-  try {
-    const col = await MLL.load("collapse");
-    const last = col.generations[col.generations.length - 1];
-    document.getElementById("fig-collapse").textContent = MLL.pct(last.real_test_accuracy);
-    if (col.sample) samples.push("collapse result");
-  } catch (e) { console.error(e); }
-  if (samples.length) {
-    const all = samples.length === 3;
-    document.getElementById("figs-sample-text").textContent =
-      all ? "Sample data" : "Sample data: " + samples.join(", ");
-    document.getElementById("figs-sample").hidden = false;
-  }
-})();
-</script>
 </body>
 </html>

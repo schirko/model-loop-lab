@@ -37,3 +37,26 @@ def save_web_result(name: str, payload: dict, folder: Path | str = RESULTS_WEB) 
     path = folder / f"{name}.json"
     path.write_text(json.dumps(data, indent=1), encoding="utf-8")
     return path
+
+
+RESULTS_IMAGES = RESULTS_WEB / "images"
+
+# Chart colors, matching the project site.
+SPRUCE = "#2e6a4c"
+GRAY = "#8a928c"
+AMBER = "#c98a1b"
+
+
+def save_web_chart(fig, name: str, folder: Path | str = RESULTS_IMAGES) -> Path:
+    """Save a matplotlib figure as <folder>/<name>.png for the website and the presentation.
+
+    The build copies results/web/images/ into the site's images/ folder.
+    Returns the path written.
+    """
+    if not re.fullmatch(r"[a-z0-9_]+", name):
+        raise ValueError(f"Chart names use lowercase letters, digits and underscores: {name!r}")
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / f"{name}.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight", facecolor="white")
+    return path

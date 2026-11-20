@@ -43,10 +43,10 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 | M2 | Notebook 02: the evolution loop | Next | E-009, E-010, E-025 |
 | M3 | Notebook 03: racing Optuna and random guessing | Planned | E-011, E-012, E-021 |
 | M4 | Notebook 04: model collapse | Planned | E-013, E-014 |
-| M5 | Notebooks published as site pages | Planned | E-015 |
+| M5 | Notebooks published as site pages | Done early: every run notebook is published by the build (E-015) | E-015 |
 | M6 | Publish and add the portfolio card | In progress (live with sample data) | E-016, E-017, E-020 |
 | M7 | Live "run more generations" demo on the VPS (optional) | Planned | E-018 |
-| M8 | Presentation (after all other milestones) | Planned | E-026 to E-029 |
+| M8 | Presentation, growing with each notebook | In progress: part 1 (notebook 01) published | E-026 to E-029 |
 
 ### M0. Project setup and front end
 
@@ -122,7 +122,9 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 
 ### M8. Presentation
 
-**Why:** A deck tells the whole story, notebook by notebook and step by step, in about 20 minutes, for an interview, a meeting or an email. It is built last, from the finished notebooks and site, so every number in it is real.
+**Why:** A deck tells the whole story, notebook by notebook and step by step, in about 20 minutes, for an interview, a meeting or an email.
+
+**How it grows:** Part 1 (13 slides: the opening and every step of notebook 01) is published now. As each notebook is finished, its slides are added from its real results, and all formats are rebuilt. Only real numbers ever go on a slide.
 
 **The full slide-by-slide plan is in [`docs/PRESENTATION_PLAN.md`](docs/PRESENTATION_PLAN.md):** 30 slides plus a 4-slide appendix, a 12-minute core version, and for every slide its section label, headline, visual, callouts, source line and speaker notes. It is modeled on the Meat Price Explorer deck and the Life Expectancy Predictor's plain-English findings. Notebook 01's slides already carry its real numbers; notebooks 02 to 04's slides fill in as those notebooks are finished.
 
@@ -135,12 +137,14 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 
 A "The story, as a presentation" section on the project's overview page shows the cover thumbnail and slide count, a "View the presentation" button, and download links for PDF, PowerPoint, HTML and slide images, each with its size.
 
-**Done when:** all five files are published and linked, no placeholders remain, and every number matches its notebook step.
+**Done when:** the full deck (about 30 slides plus appendix) is published in every format, no plan placeholders remain, and every number matches its notebook step.
 
 ## Change history
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | Presentation part 1 published (13 slides, all formats) and linked from the overview; the deck now grows with each notebook instead of waiting for M8. |
+| 2026-11-20 | Overview page rebuilt to walk through the notebooks with real results only; notebooks and findings now published as web pages, so M5 is done early. |
 | 2026-11-20 | M8 plan rewritten as a full slide-by-slide presentation plan, `docs/PRESENTATION_PLAN.md`, walking through every notebook and step. |
 | 2026-11-19 | Added M8: a presentation in HTML, PowerPoint and PNG, built after all other milestones. |
 | 2026-11-16 | M1 done. Baseline 77.2% (default decision tree, 100% on training plots). Weakest: Aspen 44%, Douglas-fir 52%. |

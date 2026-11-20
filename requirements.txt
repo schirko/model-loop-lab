@@ -8,6 +8,7 @@ matplotlib
 # Notebooks in PyCharm
 ipykernel
 nbconvert
+markdown
 
 # Tests
 pytest

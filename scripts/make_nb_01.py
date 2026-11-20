@@ -45,6 +45,10 @@ from src.evaluate import (
     COVER_TYPES, SAMPLE_SIZE, SEED, TEST_SIZE,
     cover_type_report, evaluate, fit_predict, load_covertype, make_split,
 )
+from src.web_results import AMBER, GRAY, SPRUCE, save_web_chart
+
+import matplotlib.pyplot as plt
+plt.rcParams.update({"axes.spines.top": False, "axes.spines.right": False, "font.size": 11})
 
 pd.set_option("display.max_columns", 12)
 print(f"Seed: {SEED}   Sample size: {SAMPLE_SIZE:,}   Test share: {TEST_SIZE:.0%}")"""),
@@ -74,6 +78,22 @@ The classes are very uneven. Lodgepole pine (48.8%) and Spruce/fir (36.5%) cover
 
 ### What's next and why
 581,012 plots is too many to train models on over and over in a loop. The next step takes a smaller sample without losing the rare cover types."""),
+
+    md("""### The same counts as a chart
+Saved as `cover_types.png` for the project page and the presentation."""),
+    code("""shares = (y_full.value_counts(normalize=True).rename(index=COVER_TYPES).sort_values())
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.barh(shares.index, shares.values, color=SPRUCE)
+for i, v in enumerate(shares.values):
+    ax.text(v + 0.005, i, f"{v:.1%}", va="center")
+ax.set_xlim(0, shares.max() * 1.15)
+ax.xaxis.set_major_formatter(lambda x, _: f"{x:.0%}")
+ax.set_xlabel("Share of all 581,012 plots")
+ax.set_title("Two cover types make up most of the forest", loc="left")
+save_web_chart(fig, "cover_types")
+plt.show()"""),
+    md("""### How to read it
+One bar per cover type, longest at the top. The number at the end of each bar is its share of all plots. Lodgepole pine and Spruce/fir dwarf the rest; Cottonwood/willow barely shows."""),
 
     md("""## Step 3. Take the 20,000-plot sample
 
@@ -192,6 +212,23 @@ That gap is exactly what the evolution loop can work on. Settings such as maximu
 ### What's next and why
 A single accuracy number hides where the mistakes are. With cover types this uneven, the tree could be strong on the common types and weak on the rare ones."""),
 
+    md("""### The baseline in one chart
+Saved as `baseline_scores.png`."""),
+    code("""labels = ["Always guess\\nLodgepole pine", "Plain tree on\\nheld-out plots", "Plain tree on its\\nown training plots"]
+values = [guess, baseline, train_score]
+fig, ax = plt.subplots(figsize=(8, 4))
+bars = ax.bar(labels, values, color=[GRAY, SPRUCE, AMBER], width=0.6)
+for b, v in zip(bars, values):
+    ax.text(b.get_x() + b.get_width() / 2, v + 0.015, f"{v:.1%}", ha="center", fontweight="bold")
+ax.set_ylim(0, 1.12)
+ax.yaxis.set_major_formatter(lambda x, _: f"{x:.0%}")
+ax.set_ylabel("Accuracy")
+ax.set_title("The plain tree beats guessing, but memorized its training plots", loc="left")
+save_web_chart(fig, "baseline_scores")
+plt.show()"""),
+    md("""### How to read it
+Gray is the floor: always guessing the most common cover type. Green is the baseline, the plain tree on plots it never saw. Amber is the same tree on the plots it learned from. The gap between green and gray is what the map features are worth. The gap between amber and green is overfitting."""),
+
     md("""## Step 8. Which cover types does the baseline get right?
 
 ### What we're looking for
@@ -217,12 +254,30 @@ One caution about small numbers: with only 23 Cottonwood/willow plots held out, 
 ### What's next and why
 The table says how often each type is missed but not what it gets mistaken for. The next chart shows that."""),
 
+    md("""### Recall by cover type as a chart
+Saved as `cover_type_recall.png`."""),
+    code("""recall = report["recall"].sort_values()
+fig, ax = plt.subplots(figsize=(8, 4))
+colors = [AMBER if v < baseline else SPRUCE for v in recall.values]
+ax.barh(recall.index, recall.values, color=colors)
+ax.axvline(baseline, color=GRAY, linestyle="--", linewidth=1.5)
+ax.text(baseline, len(recall) - 0.4, f" overall {baseline:.1%}", color=GRAY, va="bottom")
+for i, v in enumerate(recall.values):
+    ax.text(v + 0.01, i, f"{v:.0%}", va="center")
+ax.set_xlim(0, 1.05)
+ax.xaxis.set_major_formatter(lambda x, _: f"{x:.0%}")
+ax.set_xlabel("Recall: share of real plots of this type the tree found")
+ax.set_title("Aspen and Douglas-fir are the baseline's weak spots", loc="left")
+save_web_chart(fig, "cover_type_recall")
+plt.show()"""),
+    md("""### How to read it
+One bar per cover type, weakest at the bottom. The dashed line is the overall accuracy. Amber bars fall below it; green bars are at or above it."""),
+
     md("""## Step 9. What gets confused with what?
 
 ### What we're looking for
 Patterns in the mistakes. Cover types that grow in similar places, at similar elevations and on similar soils, should be the ones the tree mixes up."""),
-    code("""import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
+    code("""from sklearn.metrics import ConfusionMatrixDisplay
 
 names = list(COVER_TYPES.values())
 fig, ax = plt.subplots(figsize=(8, 7))
@@ -236,6 +291,7 @@ ax.set_ylabel("Real cover type")
 ax.set_title("Baseline decision tree: share of each real cover type by answer")
 plt.xticks(rotation=35, ha="right")
 plt.tight_layout()
+save_web_chart(fig, "confusion")
 plt.show()"""),
     md("""### How to read it
 Each row is a real cover type and adds up to 100% across. Each column is the tree's answer. The diagonal from top left to bottom right shows correct answers, the same numbers as the recall column in Step 8. Any other shaded square is a mistake: the row's cover type was called the column's.
@@ -252,6 +308,32 @@ Those neighbor pairs are where a better model has the most to gain. A model that
 
 ### What's next and why
 The baseline is recorded. The last step saves it where the website can read it."""),
+
+    md("""### Why the neighbors get confused: elevation
+Elevation is the strongest single clue to which trees grow on a plot. If two cover types grow over the same range of elevations, the tree has to rely on weaker clues to tell them apart. Saved as `elevation_by_type.png`."""),
+    code("""order = (X.assign(cover=y.map(COVER_TYPES)).groupby("cover")["Elevation"].median().sort_values().index)
+data = [X.loc[y.map(COVER_TYPES) == name, "Elevation"] for name in order]
+fig, ax = plt.subplots(figsize=(8, 4.5))
+box = ax.boxplot(data, vert=False, tick_labels=list(order), patch_artist=True, showfliers=False, widths=0.6)
+for patch in box["boxes"]:
+    patch.set(facecolor=SPRUCE, alpha=0.75, edgecolor=SPRUCE)
+for part in ("whiskers", "caps"):
+    for line in box[part]:
+        line.set(color=GRAY)
+for line in box["medians"]:
+    line.set(color="white", linewidth=2)
+ax.set_xlabel("Elevation (meters)")
+ax.set_title("Neighbor cover types grow at overlapping elevations", loc="left")
+save_web_chart(fig, "elevation_by_type")
+plt.show()"""),
+    md("""### How to read it
+One row per cover type, lowest-growing at the bottom. Each box covers the middle half of that cover type's plots, the white line is the middle (median) plot, and the gray lines reach out to the typical lowest and highest plots.
+
+### What it means
+The cover types form a ladder up the mountain: Cottonwood/willow, Ponderosa pine and Douglas-fir at the bottom, Lodgepole pine and Aspen in the middle, Spruce/fir above them, Krummholz at treeline. Where boxes overlap, elevation alone can't tell the trees apart, and those are the same pairs the confusion chart showed being mixed up. Krummholz overlaps only with Spruce/fir, which is why it has a single look-alike.
+
+### What's next and why
+The baseline and its weaknesses are now clear. The last step saves the baseline where the website can read it."""),
 
     md("""## Step 10. Save the baseline for the website
 

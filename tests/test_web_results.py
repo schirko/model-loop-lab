@@ -30,3 +30,29 @@ def test_creates_the_folder(tmp_path):
     target = tmp_path / "results" / "web"
     save_web_result("baseline", {"score": 0.8}, folder=target)
     assert (target / "baseline.json").exists()
+
+
+def test_save_web_chart_writes_png(tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from src.web_results import save_web_chart
+
+    fig, ax = plt.subplots()
+    ax.bar(["a", "b"], [1, 2])
+    path = save_web_chart(fig, "test_chart", folder=tmp_path)
+    plt.close(fig)
+    assert path.name == "test_chart.png"
+    assert path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_save_web_chart_rejects_bad_names(tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from src.web_results import save_web_chart
+
+    fig, _ = plt.subplots()
+    with pytest.raises(ValueError):
+        save_web_chart(fig, "Bad Name", folder=tmp_path)
+    plt.close(fig)

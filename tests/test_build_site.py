@@ -35,6 +35,8 @@ def test_build_copies_site_and_overlays_results(tmp_path, monkeypatch):
     (results / "evolution.json").write_text('{"sample": false}', encoding="utf-8")
     monkeypatch.setattr(build_site, "SITE_SRC", src)
     monkeypatch.setattr(build_site, "RESULTS_WEB", results)
+    monkeypatch.setattr(build_site, "NOTEBOOKS", tmp_path / "no-notebooks")
+    monkeypatch.setattr(build_site, "DOCS", tmp_path / "no-docs")
 
     target = tmp_path / "scott" / "model-loop-lab"
     target.parent.mkdir()
@@ -59,6 +61,8 @@ def test_build_never_touches_portfolio_files(tmp_path, monkeypatch):
     (src / "index.html").write_text("\n".join(build_site.REQUIRED_MARKERS.values()), encoding="utf-8")
     monkeypatch.setattr(build_site, "SITE_SRC", src)
     monkeypatch.setattr(build_site, "RESULTS_WEB", tmp_path / "no-results")
+    monkeypatch.setattr(build_site, "NOTEBOOKS", tmp_path / "no-notebooks")
+    monkeypatch.setattr(build_site, "DOCS", tmp_path / "no-docs")
 
     scott = tmp_path / "scott"
     scott.mkdir()
@@ -72,3 +76,46 @@ def test_build_never_touches_portfolio_files(tmp_path, monkeypatch):
     assert (scott / "styles.css").read_text(encoding="utf-8") == "PORTFOLIO STYLES"
     new = {p.relative_to(scott) for p in scott.rglob("*")} - before
     assert all(p.parts[0] == "model-loop-lab" for p in new), f"wrote outside its folder: {new}"
+
+
+def test_add_portfolio_chrome_puts_bar_first_in_body():
+    page = "<html><head><title>x</title></head><body class='a'><p>hi</p></body></html>"
+    out = build_site.add_portfolio_chrome(page)
+    assert build_site.missing_markers(out) == []
+    assert out.index("sx-backbar") < out.index("<p>hi</p>")
+    assert out.index("/scott/backbar.css") < out.index("</head>")
+    assert '<span class="sx-crumb">Model Loop Lab</span>' in out
+
+
+def _write_notebook(path, with_output):
+    import nbformat
+    cell = nbformat.v4.new_code_cell("print('hello')")
+    if with_output:
+        cell.outputs = [nbformat.v4.new_output("stream", name="stdout", text="hello\n")]
+    nb = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell("# Title"), cell])
+    nbformat.write(nb, path)
+
+
+def test_publish_notebooks_skips_unrun_notebooks(tmp_path):
+    nbs = tmp_path / "notebooks"
+    nbs.mkdir()
+    _write_notebook(nbs / "01_run.ipynb", with_output=True)
+    _write_notebook(nbs / "02_not_run.ipynb", with_output=False)
+    site = tmp_path / "model-loop-lab"
+    published = build_site.publish_notebooks(site, notebooks=nbs)
+    assert published == ["01_run"]
+    page = (site / "notebooks" / "01_run.html").read_text(encoding="utf-8")
+    assert build_site.missing_markers(page) == []
+    assert "hello" in page
+    assert not (site / "notebooks" / "02_not_run.html").exists()
+
+
+def test_publish_docs_renders_findings(tmp_path):
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "FINDINGS.md").write_text("# Findings\n\n| a | b |\n|---|---|\n| 1 | 2 |\n", encoding="utf-8")
+    site = tmp_path / "model-loop-lab"
+    assert build_site.publish_docs(site, docs=docs) == ["FINDINGS"]
+    page = (site / "docs" / "FINDINGS.html").read_text(encoding="utf-8")
+    assert build_site.missing_markers(page) == []
+    assert "<table>" in page and "<title>Findings - Model Loop Lab</title>" in page

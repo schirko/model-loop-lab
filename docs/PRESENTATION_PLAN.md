@@ -4,7 +4,9 @@ A story deck that walks through the whole project, one notebook at a time and on
 
 **Length:** 30 slides, about 20 minutes, plus a 4-slide appendix for questions. A 12-minute version uses only the slides marked **[core]**.
 
-**Formats (built at Milestone 8, after notebooks 02 to 04 are finished):** one self-contained HTML page, PowerPoint with speaker notes, PDF, a zip of every slide as a PNG, and `cover.png` for the thumbnail. All live in `scott/model-loop-lab/presentation/` and are linked from a "The story, as a presentation" section on the project's overview page.
+**Built in parts.** Part 1 (the opening and notebook 01, 13 slides including a "what's next" slide) is published now. Each notebook's slides are added when it is finished, so the deck always holds real results only.
+
+**Formats:** one self-contained HTML page, PowerPoint with speaker notes, PDF, a zip of every slide as a PNG, and `cover.png` for the thumbnail. All live in `scott/model-loop-lab/presentation/` and are linked from a "The story, as a presentation" section on the project's overview page.
 
 **Story arc:** the question → the words → the plan → **Notebook 01:** the data and a plain model → **Notebook 02:** a loop that builds better models → **Notebook 03:** is the loop better than the alternatives? → **Notebook 04:** a loop that makes models worse → the verdict → what's next.
 

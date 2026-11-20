@@ -71,14 +71,10 @@ All done.
 
 | ID | Enhancement | Milestone | Priority | Status |
 |---|---|---|---|---|
-| E-015 | Publish the notebooks as web pages under `site/notebooks/` with back bar and noindex tag | M5 | P2 | Open |
 | E-021 | Change the portfolio card status from "In progress" once real results replace the sample data | M3 | P2 | Open |
 | E-018 | Live "run more generations" demo on the VPS | M7 | P3 | Open |
-| E-026 | Presentation: fill `docs/PRESENTATION_PLAN.md`'s notebook 02 to 04 slides from the finished notebooks (plan written 2026-11-20) | M8 | P3 | Open |
-| E-030 | Every notebook saves the charts the deck uses as PNG files, so slides show the exact notebook figures | M8 | P2 | Open |
-| E-027 | Presentation as one self-contained HTML file in `site/presentation/` (works offline), plus `cover.png` | M8 | P3 | Open |
-| E-028 | Presentation as PowerPoint (.pptx, with speaker notes), PDF, and a zip of every slide as PNG | M8 | P3 | Open |
-| E-029 | "The story, as a presentation" section on the overview page: thumbnail, view button, four downloads with sizes | M8 | P3 | Open |
+| E-026 | Presentation: add each notebook's slides (plan slides 13 to 30) to `presentation/build_deck.js` when it is finished, then rerun `make_formats.py` | M2–M4 | P2 | Open |
+| E-030 | Every notebook saves its charts as PNG files for the site and the deck (done for notebook 01; repeat for 02 to 04) | M2–M4 | P2 | Open |
 | E-019 | Host the Plotly script and fonts locally instead of from cdnjs and Google Fonts | — | P3 | Open |
 
 ## Enhancements: done
@@ -93,6 +89,13 @@ All done.
 | E-006 | First commit and push of the project repo (`master` branch, `.idea` untracked) | Project | 2026-11-15 |
 | E-016 | Portfolio screenshot `model-loop-lab.png` (made by the portfolio session) | Site | 2026-11-15 |
 | E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | Site | 2026-11-15 |
+| E-027 | Presentation part 1 (13 slides: opening and every step of notebook 01) built as native PowerPoint with speaker notes (`presentation/build_deck.js`) | Presentation | 2026-11-20 |
+| E-028 | PDF, slide PNGs (zipped), one-file offline web page with speaker notes, and cover, all made from the one PowerPoint (`presentation/make_formats.py`), published in `site/presentation/` | Presentation | 2026-11-20 |
+| E-029 | "The story, as a presentation" section on the overview: cover thumbnail with slide count, View button, four downloads with sizes; a test checks they match the deck | Site | 2026-11-20 |
+| E-031 | Overview page rebuilt on the Life Expectancy / meat-prices pattern: label line, four stat cards, hero chart, plain English, key-findings cards, five charts with captions, word list, numbered "How it was done", numbered notebook cards, More; no sample numbers on the overview | Site | 2026-11-20 |
+| E-015 | Build publishes every run notebook as a web page in `notebooks/`, with the back bar (`publish_notebooks()`), and skips notebooks not yet run | Site | 2026-11-20 |
+| E-032 | `docs/FINDINGS.md` (Life Expectancy pattern: start here, word list, short version, one section per finding) published as `docs/FINDINGS.html` | Site | 2026-11-20 |
+| E-033 | Notebook 01 draws and saves five charts (cover types, baseline scores, recall by cover type, elevation by cover type, confusion); `save_web_chart()` with 2 tests; build copies them to the site | Notebook 01 | 2026-11-20 |
 | E-020 | Sample-data version published to schirko.com/scott/model-loop-lab | Site | 2026-11-15 |
 | E-008 | `src/evaluate.py`: shared loading, 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests | Notebook 01 | 2026-11-15 |
 | E-024 | Notebook 01 run on the real data; "What it means" notes written from the actual numbers (baseline 77.2%, weakest Aspen 44%) | Notebook 01 | 2026-11-16 |
@@ -104,6 +107,8 @@ All done.
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | Presentation part 1 published in all formats and linked from the overview (E-027 to E-029). The deck now grows with each notebook (E-026). Tests now 44. |
+| 2026-11-20 | Overview rebuilt (E-031), notebooks and findings published as web pages (E-015, E-032), notebook 01 charts (E-033). E-015 moved forward from M5. Tests now 41. |
 | 2026-11-20 | Full presentation plan written (`docs/PRESENTATION_PLAN.md`); added E-030. |
 | 2026-11-19 | Added E-026 to E-029 for the M8 presentation. |
 | 2026-11-16 | Notebook 01 done (E-024): M1 complete. B-006 and B-007 found and fixed. |

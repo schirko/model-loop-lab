@@ -84,13 +84,18 @@ model-loop-lab/
 │   ├── __init__.py               makes src importable (from src.evaluate import ...)
 │   ├── evaluate.py               data loading, sample, split and scoring (M1)
 │   └── web_results.py            save_web_result(): notebooks save results for the site
-├── results/web/                  real chart data written by notebooks
+├── results/web/                  real results written by notebooks: *.json data, images/*.png charts
 ├── data/                         downloaded data, not committed
 ├── .env.example                  copy to .env and set SITE_DIR
 ├── .gitignore
 ├── pytest.ini
 ├── requirements.txt
+├── presentation/
+│   ├── build_deck.js             builds the deck as a PowerPoint (pptxgenjs)
+│   ├── make_formats.py           makes the PDF, slide PNGs, zip, web page and cover from it
+│   └── assets/                   images the deck uses (confusion chart)
 ├── docs/
+│   ├── FINDINGS.md               every conclusion so far; published as docs/FINDINGS.html
 │   └── PRESENTATION_PLAN.md       slide-by-slide plan for the M8 presentation
 ├── Site-Milestones.md
 ├── Enhancements-and-Bugs.md
@@ -152,6 +157,19 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 It never writes `scott\index.html` or `scott\styles.css`; the portfolio project owns those. Card changes are sent to Scott as text, and he passes them to the portfolio project. `scripts/build_site.py` writes only inside `SITE_DIR`, refuses any `SITE_DIR` not named `model-loop-lab`, and `tests/test_build_site.py::test_build_never_touches_portfolio_files` checks that the portfolio's files are left untouched.
 
+**What the build does** (`scripts/build_site.py`), in order:
+1. Copies `site/` into `SITE_DIR`.
+2. Copies `results/web/*.json` over the sample data in `data/`, and `results/web/images/*.png` into `images/`.
+3. Publishes every notebook that has been run (`notebooks/NN_*.ipynb` with saved outputs) as `notebooks/NN_*.html`, using nbconvert's "lab" layout, with the portfolio head links and back bar added. Notebooks not yet run are skipped.
+4. Publishes `docs/FINDINGS.md` as `docs/FINDINGS.html` (the `markdown` package), with the back bar.
+5. Checks every page for the back bar, favicon and noindex tag.
+
+**The overview page** follows the Life Expectancy and Meat Price Explorer pages: a label line, title, lede and buttons; four stat cards; the hero chart; "The project in plain English"; "Key findings so far" as one card per finding with its notebook step; the notebook charts with captions; "Words used on this page"; "How it was done" as numbered steps; "The analysis, step by step" as one numbered card per notebook (linked once published); and "More". It shows real results only. A test checks that it quotes the same baseline as `results/web/baseline.json`, and another that it carries no sample numbers. The two experiment pages keep their tagged sample charts until notebooks 02 to 04 replace them.
+
+**The presentation.** `presentation/build_deck.js` builds the deck as a native PowerPoint (editable text and charts, speaker notes on every slide) following `docs/PRESENTATION_PLAN.md`. `presentation/make_formats.py` turns that one file into everything published in `site/presentation/`: the `.pptx`, a PDF, every slide as a PNG (zipped), a single-file web page with slide controls and speaker notes that works offline, `cover.png`, and `deck.json` (slide count and file sizes). The overview's "The story, as a presentation" section links them, and a test checks its slide count and sizes against `deck.json`. Rebuilding needs Node with `pptxgenjs`, LibreOffice and Poppler, so Claude rebuilds it as each notebook's slides are added; the published files are committed with the site.
+
+**Charts.** Notebooks save charts with `save_web_chart(fig, name)` from `src/web_results.py` (150 dpi PNG, white background, site colors `SPRUCE`, `GRAY`, `AMBER`). The overview, the findings and the presentation all use these same files.
+
 **Pages.** Plain HTML in `site/`. Every page carries, as the portfolio requires: the noindex meta tag, `/scott/backbar.css`, the four favicon links, and the `sx-backbar` block as the first thing in `<body>` with the crumb "Model Loop Lab". All links use absolute `/scott/` paths.
 
 **Charts.** Each chart page loads Plotly, then `assets/charts.js`, then its own short script. The script calls `MLL.load("<name>")` to fetch `/scott/model-loop-lab/data/<name>.json` and `MLL.draw()` to render. Colors come from CSS variables, so light and dark mode both work.
@@ -191,6 +209,19 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-20: Presentation part 1 published
+
+**Why:** the other portfolio projects let visitors view and download their presentation; this one now does too, from part 1 on, instead of waiting for the end.
+**Added:** `presentation/build_deck.js` (13 slides: title, the two loops, word list, the four notebooks, notebook 01 opener, Steps 1 to 10 across seven slides, what's next; every slide with speaker notes), `presentation/make_formats.py`, `presentation/assets/confusion.png` (from notebook 01's real run), `site/presentation/` (pptx, pdf, slides zip, web page, cover, deck.json), the overview's "The story, as a presentation" section and its styles, and a test that the overview matches the deck (suite now 44). `presentation/out/` is git-ignored.
+**Design:** Cambria headings and Calibri text (both ship with Office, so the PowerPoint looks the same on any PC), the site's spruce green with amber for "memorized" and weak spots, dark slides for the title and section openers.
+
+### 2026-11-20: Overview rebuilt; notebooks and findings published as web pages
+
+**Why:** the first overview was a placeholder built before any results: short, didn't walk through the notebooks, and showed sample numbers (86.7%, 46.0%) next to the real 77.2%. Rebuilt on the Life Expectancy Predictor and Meat Price Explorer pages.
+**Changed:** `site/index.html` rewritten (see Part 3, "The overview page"); `site/assets/site.css` gained the matching styles (stat cards, panels, finding cards, numbered steps and notebook cards, docs pages); `site/notebooks/index.html` links notebook 01.
+**Added:** `scripts/build_site.py` now copies chart images, publishes run notebooks (`publish_notebooks()`) and `docs/FINDINGS.md` (`publish_docs()`); `docs/FINDINGS.md`; notebook 01 now draws and saves five charts (`cover_types`, `baseline_scores`, `cover_type_recall`, `elevation_by_type`, `confusion`), including a new elevation-by-cover-type chart in Step 9; `save_web_chart()` in `src/web_results.py`; `markdown` in `requirements.txt`; 7 tests (suite now 41).
+**Next run:** notebook 01 must be rerun to save its charts, then the build publishes everything.
 
 ### 2026-11-20: Presentation plan
 

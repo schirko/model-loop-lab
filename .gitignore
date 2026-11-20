@@ -14,3 +14,6 @@ __pycache__/
 # Downloaded or large data stays out of Git
 data/*
 !data/.gitkeep
+
+# Working copy of the deck (the published copy is site/presentation/)
+presentation/out/
