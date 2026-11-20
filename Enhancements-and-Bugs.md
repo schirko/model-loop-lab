@@ -14,8 +14,8 @@ The working list for this project, maintained by Claude.
 
 | # | Notebook | What it answers | Milestone | Status |
 |---|---|---|---|---|
-| 01 | `01_data_and_baseline.ipynb` | What does the data look like, and how good is a plain model? | M1 | In progress |
-| 02 | `02_evolution_loop.ipynb` | Can a program find better models on its own? | M2 | Planned |
+| 01 | `01_data_and_baseline.ipynb` | What does the data look like, and how good is a plain model? | M1 | Done: baseline 77.2% |
+| 02 | `02_evolution_loop.ipynb` | Can a program find better models on its own? | M2 | Next |
 | 03 | `03_search_race.ipynb` | Does the loop beat Optuna and random guessing? | M3 | Planned |
 | 04 | `04_model_collapse.ipynb` | What happens when models learn only from other models? | M4 | Planned |
 
@@ -31,6 +31,9 @@ None.
 
 | ID | Bug | Found | Fixed | How it was fixed |
 |---|---|---|---|---|
+| B-006 | Commands typed as `python` ran the Life Expectancy project's environment, not this one: packages went to the wrong place and `jupyter` could not find a kernel | 2026-11-16 | 2026-11-16 | Every command now calls `.venv\Scripts\python` directly; the guide says so |
+| B-007 | Some of Claude's file updates were undone on the PC (PyCharm saved its older open copies over them) | 2026-11-16 | 2026-11-16 | Files rewritten and sizes checked; when PyCharm reports a file changed on disk, choose Load File System Changes |
+| B-005 | Notebook 01 Step 8 stopped with "The '.style' accessor requires jinja2" | 2026-11-16 | 2026-11-16 | Formatted the recall and precision columns as text instead of using pandas `.style`, so no extra package is needed |
 | B-001 | Chart x-axis titles drew over the bottom edge of the chart box | 2026-11-15 | 2026-11-15 | Removed padding from `.mll-chart` so Plotly's own margins fit the box |
 | B-002 | Charts ran off the right edge on phone screens | 2026-11-15 | 2026-11-15 | `MLL.draw()` passes the box's exact width and height to Plotly |
 | B-003 | End-of-line labels were cut off on phones | 2026-11-15 | 2026-11-15 | Labels are hidden below 520 px wide; the legend names the lines instead |
@@ -40,9 +43,7 @@ None.
 
 ### Notebook 01: Data and baseline
 
-| ID | Enhancement | Priority | Status |
-|---|---|---|---|
-| E-024 | Run notebook 01 in PyCharm on the real data and write the "What it means" notes from the actual numbers | P1 | Open |
+All done.
 
 ### Notebook 02: Evolution loop
 
@@ -73,6 +74,10 @@ None.
 | E-015 | Publish the notebooks as web pages under `site/notebooks/` with back bar and noindex tag | M5 | P2 | Open |
 | E-021 | Change the portfolio card status from "In progress" once real results replace the sample data | M3 | P2 | Open |
 | E-018 | Live "run more generations" demo on the VPS | M7 | P3 | Open |
+| E-026 | Presentation: outline and slide content from the finished notebooks and site | M8 | P3 | Open |
+| E-027 | Presentation as an HTML page under `site/presentation/` with the back bar and noindex tag | M8 | P3 | Open |
+| E-028 | Presentation as a PowerPoint (.pptx) file and a PNG of each slide | M8 | P3 | Open |
+| E-029 | Link the presentation from the project site | M8 | P3 | Open |
 | E-019 | Host the Plotly script and fonts locally instead of from cdnjs and Google Fonts | — | P3 | Open |
 
 ## Enhancements: done
@@ -89,6 +94,7 @@ None.
 | E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | Site | 2026-11-15 |
 | E-020 | Sample-data version published to schirko.com/scott/model-loop-lab | Site | 2026-11-15 |
 | E-008 | `src/evaluate.py`: shared loading, 20,000-plot stratified sample, train/test split, accuracy scoring; 10 pytest tests | Notebook 01 | 2026-11-15 |
+| E-024 | Notebook 01 run on the real data; "What it means" notes written from the actual numbers (baseline 77.2%, weakest Aspen 44%) | Notebook 01 | 2026-11-16 |
 | E-023 | Notebook 01 Step 10 saves `results/web/baseline.json`; overview and The loop works read it; sample tag on the overview names only figures still on sample data; `src/web_results.py` with 4 tests | Notebook 01 | 2026-11-16 |
 | E-007 | Notebook 01 Steps 7 to 9: baseline score with training-score comparison, per-cover-type table, confusion chart; `fit_predict()` and `cover_type_report()` added to `src/evaluate.py` with 2 tests | Notebook 01 | 2026-11-16 |
 | E-022 | Notebook 01 started: setup, full dataset, sample, split, guessing versus a tree, repeatability check | Notebook 01 | 2026-11-16 |
@@ -97,6 +103,9 @@ None.
 
 | Date | Change |
 |---|---|
+| 2026-11-19 | Added E-026 to E-029 for the M8 presentation. |
+| 2026-11-16 | Notebook 01 done (E-024): M1 complete. B-006 and B-007 found and fixed. |
+| 2026-11-16 | First real run of notebook 01: baseline 77.18%. B-005 found and fixed. |
 | 2026-11-16 | E-023 done. Test suite now 33 tests. |
 | 2026-11-16 | E-007 done. Test suite now 28 tests. |
 | 2026-11-16 | Reorganized around four notebooks. Enhancements are now the tasks that build each notebook and the site, grouped by notebook. Notebook 01 renamed `01_data_and_baseline.ipynb`; the baseline (E-007) goes into it instead of a separate notebook. Added E-022 to E-025. |

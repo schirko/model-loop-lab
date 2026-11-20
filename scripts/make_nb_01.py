@@ -10,7 +10,7 @@ code = nbf.v4.new_code_cell
 cells = [
     md("""# 01. Data and baseline
 
-**Notebook:** 01 of 4 · **Milestone:** M1 · **Code:** `src/evaluate.py` · **Enhancements:** E-008, E-022, E-007, E-023 (done), E-024 (to come)
+**Notebook:** 01 of 4 · **Milestone:** M1 · **Code:** `src/evaluate.py` · **Enhancements:** E-008, E-022, E-007, E-023, E-024
 
 This notebook answers two questions: what does the Colorado forest data look like, and how good is a plain model with no tuning? The second answer is the baseline, the number every later notebook has to beat.
 
@@ -70,7 +70,7 @@ full_counts"""),
 One row per cover type: how many plots have it and what share of all plots that is.
 
 ### What it means
-The classes are very uneven. Two cover types, Lodgepole pine and Spruce/fir, take up most of the forest, while Cottonwood/willow is a tiny sliver. A model can look good by getting the two big ones right and ignoring the rest, which is worth remembering whenever we read an accuracy number later.
+The classes are very uneven. Lodgepole pine (48.8%) and Spruce/fir (36.5%) cover 85% of the forest, while Cottonwood/willow is under half a percent: 2,747 plots out of 581,012. A model can look good by getting the two big ones right and ignoring the rest, which is worth remembering whenever we read an accuracy number later.
 
 ### What's next and why
 581,012 plots is too many to train models on over and over in a loop. The next step takes a smaller sample without losing the rare cover types."""),
@@ -93,7 +93,7 @@ compare"""),
 The first column is each cover type's share of the full forest. The next two are its count and share in the sample.
 
 ### What it means
-The two share columns should match to within a few hundredths of a percent. That's what stratifying buys us: the sample is a small but faithful copy of the forest, rare cover types included.
+The two share columns match to within a hundredth of a percent. Even Cottonwood/willow keeps its 0.47%, which is 94 plots in the sample. That's what stratifying buys us: the sample is a small but faithful copy of the forest, rare cover types included.
 
 ### What's next and why
 Now the sample has to be split, so models can be trained on some plots and tested on plots they have never seen."""),
@@ -137,7 +137,7 @@ print(f"Plain decision tree:               {tree:.1%}")"""),
 Each number is accuracy: the share of the 5,000 held-out plots where the predicted cover type was right.
 
 ### What it means
-Guessing scores about the same as the largest cover type's share, because that's the only type it ever predicts. The decision tree, which actually looks at elevation, soil and the rest, should do far better. The gap between the two is how much the map features tell us about which trees grow where.
+Guessing scores 48.8%, exactly Lodgepole pine's share, because Lodgepole pine is the only answer it ever gives. The decision tree, which actually looks at elevation, soil and the rest, scores 77.2%. That 28-point gap is how much the map features tell us about which trees grow where.
 
 ### What's next and why
 Before trusting `evaluate()` inside a loop that calls it hundreds of times, we need to know it gives the same answer every time and has no side effects."""),
@@ -183,7 +183,9 @@ print(f"Wrong on {int(round((1 - baseline) * len(split.y_test))):,} of {len(spli
 The first line is the baseline. The second is the same tree scored on the 15,000 plots it learned from. The third line gives the tree's size: each level is one more yes/no question, and each leaf is a final answer. The last line turns the baseline into a count of mistakes.
 
 ### What it means
-A default tree keeps splitting until every training plot is sorted perfectly, which is why its training score is at or near 100%. It grows thousands of leaves, many of them fitted to single, unusual plots. The drop from that near-perfect training score to the held-out score is **overfitting**: the tree memorized details that don't carry over to new plots.
+The baseline is **77.2%**: the tree is wrong on 1,141 of the 5,000 plots it has never seen. On its own training plots it scores a perfect 100%. A default tree keeps asking yes/no questions until every training plot is sorted, and this one needed 33 levels and 2,341 leaves to do it, which works out to about one leaf for every six training plots. Many of those leaves describe single, unusual plots.
+
+The 23-point drop from 100% to 77.2% is **overfitting**: the tree memorized details of its training plots that don't carry over to new ones.
 
 That gap is exactly what the evolution loop can work on. Settings such as maximum depth and minimum leaf size stop a tree from memorizing, and other model types average many trees together. The loop's job is to find the combination that closes the gap.
 
@@ -195,7 +197,10 @@ A single accuracy number hides where the mistakes are. With cover types this une
 ### What we're looking for
 For each cover type: how many held-out plots it has, how many the tree got right (**recall**), and how trustworthy the tree's answer is when it names that type (**precision**). Rare cover types are where a model is most likely to struggle."""),
     code("""report = cover_type_report(split.y_test, predictions)
-report.style.format({"recall": "{:.1%}", "precision": "{:.1%}"})"""),
+shown = report.copy()
+for col in ["recall", "precision"]:
+    shown[col] = shown[col].map("{:.1%}".format)
+shown"""),
     md("""### How to read it
 * **plots**: how many of the 5,000 held-out plots really are this cover type
 * **correct**: how many of those the tree labeled correctly
@@ -203,7 +208,11 @@ report.style.format({"recall": "{:.1%}", "precision": "{:.1%}"})"""),
 * **precision**: of every plot the tree *called* this type, the share that really were. "When the tree says Aspen, how often is it right?"
 
 ### What it means
-Look at whether the low recall rates line up with the small plot counts. If they do, the baseline is weakest on the cover types it saw the fewest examples of. That's normal for an untuned tree, and it means the overall accuracy is carried mostly by Lodgepole pine and Spruce/fir.
+The two big cover types sit near the overall score: Lodgepole pine 80% and Spruce/fir 77%. The weak spots are **Aspen (44%)**, **Douglas-fir (52%)** and **Cottonwood/willow (65%)**, three of the four rarest types. Aspen is the clearest problem: the tree finds fewer than half the real Aspen plots, and when it does say Aspen it's right only 44% of the time.
+
+Rarity isn't the whole story, though. Krummholz is rare too (177 held-out plots), yet the tree finds 77% of it, about as well as the common types. The next chart suggests why: it depends on which cover types each one can be mistaken for.
+
+One caution about small numbers: with only 23 Cottonwood/willow plots held out, each one moves its recall by more than 4 points, so treat its rate as rough.
 
 ### What's next and why
 The table says how often each type is missed but not what it gets mistaken for. The next chart shows that."""),
@@ -232,7 +241,14 @@ plt.show()"""),
 Each row is a real cover type and adds up to 100% across. Each column is the tree's answer. The diagonal from top left to bottom right shows correct answers, the same numbers as the recall column in Step 8. Any other shaded square is a mistake: the row's cover type was called the column's.
 
 ### What it means
-The biggest off-diagonal squares show which cover types look alike from the map features. Expect Spruce/fir and Lodgepole pine to be confused with each other, since they share the middle elevations, and the lower-elevation types (Ponderosa pine, Douglas-fir, Cottonwood/willow) to be confused among themselves. Those mix-ups are where a better model has the most to gain.
+The mistakes fall into neighbor pairs, cover types that share elevations and soils:
+
+* **Spruce/fir and Lodgepole pine** swap with each other: 21% of Spruce/fir is called Lodgepole pine, and 16% of Lodgepole pine is called Spruce/fir. Because these two are 85% of all plots, this pair alone causes most of the 1,141 mistakes.
+* **Aspen** is called Lodgepole pine 44% of the time, as often as it's called Aspen. Aspen tends to grow mixed in with lodgepole stands, so the map features look nearly the same.
+* **Douglas-fir** is called Ponderosa pine 30% of the time, and **Cottonwood/willow** is called Ponderosa pine 26% of the time. These are the low-elevation types.
+* **Krummholz**, the stunted trees at treeline, is only ever confused with Spruce/fir (20%), its neighbor just below it on the mountain. That is why it does well despite being rare: it has only one look-alike.
+
+Those neighbor pairs are where a better model has the most to gain. A model that separates Spruce/fir from Lodgepole pine even a little better will raise the overall score more than anything else.
 
 ### What's next and why
 The baseline is recorded. The last step saves it where the website can read it."""),
@@ -278,8 +294,8 @@ The build should list `baseline.json` under "Real results used." Then notebook 0
 | Sample | 20,000 plots, cover-type shares kept |
 | Split | 15,000 training / 5,000 held-out, no overlap |
 | Scoring | Repeatable, never changes the model passed in |
-| Baseline | Default decision tree, scored in Step 7 |
-| Weak spots | Rare cover types and look-alike pairs, Steps 8 and 9 |
+| Baseline | Default decision tree: **77.2%** held out, 100% on training plots (Step 7) |
+| Weak spots | Aspen 44%, Douglas-fir 52%, Cottonwood/willow 65%; Spruce/fir and Lodgepole pine confused with each other (Steps 8 and 9) |
 | Saved for the site | `results/web/baseline.json`, Step 10 |
 
 The data and scoring checks also run automatically in `tests/test_evaluate.py` every time `python -m pytest` runs, on a small made-up dataset so they don't need the download."""),

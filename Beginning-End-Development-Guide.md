@@ -97,9 +97,10 @@ model-loop-lab/
 
 ### Step 3. Install packages and set the publish folder (M0)
 
+Always call this project's own Python by its path, `.venv\Scripts\python`. On this PC a plain `python` can resolve to another project's environment even when the prompt shows `(.venv)` (bug B-006).
+
 ```
-.venv\Scripts\activate
-python -m pip install -r requirements.txt
+.venv\Scripts\python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
@@ -108,8 +109,8 @@ copy .env.example .env
 ### Step 4. Test, build and preview (M0)
 
 ```
-python -m pytest
-python scripts/build_site.py
+.venv\Scripts\python -m pytest
+.venv\Scripts\python scripts/build_site.py
 ```
 
 To preview, serve the Schirko folder so the `/scott/...` paths resolve, then open http://localhost:8000/scott/model-loop-lab/ in a browser:
@@ -143,6 +144,12 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 ## Part 3. How the pieces fit together
 
+**Ownership in the portfolio folder (standing rule).** This project owns only:
+- `Schirko\scott\model-loop-lab\` (everything the build writes)
+- `Schirko\scott\images\screenshots\model-loop-lab.png` (its card screenshot)
+
+It never writes `scott\index.html` or `scott\styles.css`; the portfolio project owns those. Card changes are sent to Scott as text, and he passes them to the portfolio project. `scripts/build_site.py` writes only inside `SITE_DIR`, refuses any `SITE_DIR` not named `model-loop-lab`, and `tests/test_build_site.py::test_build_never_touches_portfolio_files` checks that the portfolio's files are left untouched.
+
 **Pages.** Plain HTML in `site/`. Every page carries, as the portfolio requires: the noindex meta tag, `/scott/backbar.css`, the four favicon links, and the `sx-backbar` block as the first thing in `<body>` with the crumb "Model Loop Lab". All links use absolute `/scott/` paths.
 
 **Charts.** Each chart page loads Plotly, then `assets/charts.js`, then its own short script. The script calls `MLL.load("<name>")` to fetch `/scott/model-loop-lab/data/<name>.json` and `MLL.draw()` to render. Colors come from CSS variables, so light and dark mode both work.
@@ -173,7 +180,7 @@ Never edit `scott/index.html` (the portfolio page). Send card details to the por
 
 One seed (42) drives every random step, so rerunning a notebook gives the same numbers.
 
-**Notebooks.** The project has four notebooks, one per milestone: `01_data_and_baseline`, `02_evolution_loop`, `03_search_race`, `04_model_collapse`. Many enhancements go into each one. Each notebook has: setup cell, then for every step a "What we're looking for" note, the code, its output, and "How to read it", "What it means", "What's next and why". To run one in PyCharm: open the `.ipynb`, pick the project's `.venv` as the kernel (top right), click **Run All**. The setup cell adds the project root to the import path, so `from src.evaluate import ...` works from inside `notebooks/`.
+**Notebooks.** The project has four notebooks, one per milestone: `01_data_and_baseline`, `02_evolution_loop`, `03_search_race`, `04_model_collapse`. Many enhancements go into each one. Each notebook has: setup cell, then for every step a "What we're looking for" note, the code, its output, and "How to read it", "What it means", "What's next and why". To run one in PyCharm: open the `.ipynb`, pick the project's `.venv` as the kernel (top right), click **Run All**. To run a notebook from the terminal instead, saving every output into the file and stopping with a clear message at the first error: `.venv\Scripts\python -m nbconvert --to notebook --execute --inplace notebooks/<name>.ipynb`. The setup cell adds the project root to the import path, so `from src.evaluate import ...` works from inside `notebooks/`.
 
 **Tests.** `python -m pytest` runs everything in `tests/`. `pytest.ini` puts the project root and `scripts/` on the import path. Current coverage: the build script, the portfolio rules on every page, the shape of every data file, and `src/evaluate.py` (sampling keeps class shares, splits don't overlap, scoring is repeatable and never changes the model passed in). The evaluate tests use a small made-up dataset, so they never download Covertype.
 
@@ -182,6 +189,22 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-16: M1 complete (E-024)
+
+**Result:** notebook 01 run on the real data. Baseline 77.2% (default decision tree; 100% on training plots, 33 levels, 2,341 leaves). Guessing the most common type: 48.8%. Weakest cover types: Aspen 44%, Douglas-fir 52%, Cottonwood/willow 65%. Biggest confusions: Spruce/fir and Lodgepole pine with each other, Aspen called Lodgepole pine, Douglas-fir and Cottonwood/willow called Ponderosa pine.
+**Changed:** notebook 01's "What it means" notes rewritten from these real numbers.
+**Fixed:** B-006, commands now call `.venv\Scripts\python` (plain `python` ran the Life Expectancy environment). B-007, file updates undone by PyCharm were rewritten. Notebooks are now run with `nbconvert` from the terminal, which saves every output into the file.
+
+### 2026-11-16: Run notebooks from the terminal
+
+**Added:** `nbconvert` to `requirements.txt`, so a notebook can be run top to bottom from the terminal with its outputs saved. Added after two PyCharm runs of notebook 01 stopped after Step 4 without recording an error.
+
+### 2026-11-16: Portfolio ownership rule
+
+**Rule:** this project never writes `scott/index.html` or `scott/styles.css`. It owns only `scott/model-loop-lab/` and `scott/images/screenshots/model-loop-lab.png`. Card changes go to Scott as text.
+**Checked:** `scripts/build_site.py` had no step writing `index.html` or `styles.css` (it writes only inside `SITE_DIR`), so nothing was removed.
+**Added:** test `test_build_never_touches_portfolio_files` (suite now 34).
 
 ### 2026-11-16: First real run of notebook 01; B-005 fixed
 

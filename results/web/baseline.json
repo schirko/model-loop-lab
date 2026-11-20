@@ -1,0 +1,12 @@
+{
+ "sample": false,
+ "recorded": "2026-11-16",
+ "label": "Default decision tree",
+ "score": 0.7718,
+ "train_score": 1.0,
+ "held_out_plots": 5000,
+ "training_plots": 15000,
+ "tree_depth": 33,
+ "tree_leaves": 2341,
+ "seed": 42
+}

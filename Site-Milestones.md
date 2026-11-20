@@ -1,7 +1,7 @@
 # Model Loop Lab: Site Milestones
 
 **Project:** Model Loop Lab, a portfolio project on whether AI can build better AI.
-**Lives at:** `B:\_Dev\Python\model-loop-lab` (PyCharm) and https://github.com/schirko/model-loop-lab
+**Lives at:** `B:\Development\Python\model-loop-lab` (PyCharm) and https://github.com/schirko/model-loop-lab
 **Published at:** https://schirko.com/scott/model-loop-lab/ (through the Schirko repo)
 **Maintained by:** Claude, updated whenever a milestone starts, changes or finishes.
 
@@ -39,13 +39,14 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 | # | Milestone | Status | Enhancement items |
 |---|---|---|---|
 | M0 | Project setup and front end | Done | E-001 to E-006 |
-| M1 | Notebook 01: data and baseline | In progress | E-007, E-008, E-022 to E-024 |
-| M2 | Notebook 02: the evolution loop | Planned | E-009, E-010, E-025 |
+| M1 | Notebook 01: data and baseline | Done (baseline 77.2%) | E-007, E-008, E-022 to E-024 |
+| M2 | Notebook 02: the evolution loop | Next | E-009, E-010, E-025 |
 | M3 | Notebook 03: racing Optuna and random guessing | Planned | E-011, E-012, E-021 |
 | M4 | Notebook 04: model collapse | Planned | E-013, E-014 |
 | M5 | Notebooks published as site pages | Planned | E-015 |
 | M6 | Publish and add the portfolio card | In progress (live with sample data) | E-016, E-017, E-020 |
 | M7 | Live "run more generations" demo on the VPS (optional) | Planned | E-018 |
+| M8 | Presentation (after all other milestones) | Planned | E-026 to E-029 |
 
 ### M0. Project setup and front end
 
@@ -70,7 +71,7 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 - Notebook 01 walkthrough of the data, sample, split and scoring (E-022) - done
 - Baseline steps: default decision tree, per-cover-type results (E-007) - done
 - Baseline saved to the site (E-023) - done
-- Notebook run on real data and notes written (E-024)
+- Notebook run on real data and notes written (E-024) - done
 
 **Done when:** notebook 01 runs top to bottom in PyCharm and the site shows the real baseline.
 
@@ -119,10 +120,23 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 
 **Why:** A visitor clicks "run 5 more generations" and watches the loop improve live. Memorable, but not needed for the project to be complete.
 
+### M8. Presentation
+
+**Why:** A short deck tells the whole story in a few minutes, for an interview, a meeting or an email. It is built last, from the finished notebooks and site, so every number in it is real.
+
+**Plan (to match the Meat Price Explorer presentation):**
+- Slide content drawn from the four notebooks and the site: the question, the data, the baseline, the loop, the race, the collapse, what it all means
+- Three formats from one source: an HTML version on the project site, a PowerPoint (.pptx) file, and a PNG image of each slide
+- Linked from the project site, with the files kept inside `scott/model-loop-lab/`
+
+**Done when:** all three formats are published and linked, and every figure in them matches the notebooks.
+
 ## Change history
 
 | Date | Change |
 |---|---|
+| 2026-11-19 | Added M8: a presentation in HTML, PowerPoint and PNG, built after all other milestones. |
+| 2026-11-16 | M1 done. Baseline 77.2% (default decision tree, 100% on training plots). Weakest: Aspen 44%, Douglas-fir 52%. |
 | 2026-11-16 | E-023 done: baseline saved for the site. Only E-024 (real run) left in M1. |
 | 2026-11-16 | E-007 done: baseline steps added to notebook 01. |
 | 2026-11-16 | Reorganized around four notebooks, one per milestone M1 to M4. Notebook 01 (data and baseline) started. |

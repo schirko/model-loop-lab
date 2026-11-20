@@ -9,9 +9,9 @@ import build_site
 
 def test_read_env_skips_comments_and_quotes(tmp_path):
     env = tmp_path / ".env"
-    env.write_text('# comment\nSITE_DIR="B:\\_Dev\\x\\model-loop-lab"\n\nOTHER=1\n', encoding="utf-8")
+    env.write_text('# comment\nSITE_DIR="B:\\Development\\x\\model-loop-lab"\n\nOTHER=1\n', encoding="utf-8")
     values = build_site.read_env(env)
-    assert values["SITE_DIR"] == "B:\\_Dev\\x\\model-loop-lab"
+    assert values["SITE_DIR"] == "B:\\Development\\x\\model-loop-lab"
     assert values["OTHER"] == "1"
 
 
@@ -49,3 +49,26 @@ def test_check_pages_reports_missing_back_bar(tmp_path):
     (tmp_path / "page.html").write_text("<html></html>", encoding="utf-8")
     problems = build_site.check_pages(tmp_path)
     assert len(problems) == 1 and "back bar" in problems[0]
+
+
+def test_build_never_touches_portfolio_files(tmp_path, monkeypatch):
+    """Standing rule: the build writes only inside scott/model-loop-lab/.
+    The portfolio's own index.html and styles.css must be left exactly as they were."""
+    src = tmp_path / "site"
+    (src / "data").mkdir(parents=True)
+    (src / "index.html").write_text("\n".join(build_site.REQUIRED_MARKERS.values()), encoding="utf-8")
+    monkeypatch.setattr(build_site, "SITE_SRC", src)
+    monkeypatch.setattr(build_site, "RESULTS_WEB", tmp_path / "no-results")
+
+    scott = tmp_path / "scott"
+    scott.mkdir()
+    (scott / "index.html").write_text("PORTFOLIO PAGE", encoding="utf-8")
+    (scott / "styles.css").write_text("PORTFOLIO STYLES", encoding="utf-8")
+    before = {p.relative_to(scott) for p in scott.rglob("*")}
+
+    build_site.build(scott / "model-loop-lab")
+
+    assert (scott / "index.html").read_text(encoding="utf-8") == "PORTFOLIO PAGE"
+    assert (scott / "styles.css").read_text(encoding="utf-8") == "PORTFOLIO STYLES"
+    new = {p.relative_to(scott) for p in scott.rglob("*")} - before
+    assert all(p.parts[0] == "model-loop-lab" for p in new), f"wrote outside its folder: {new}"
