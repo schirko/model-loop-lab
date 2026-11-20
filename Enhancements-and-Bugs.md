@@ -74,10 +74,11 @@ All done.
 | E-015 | Publish the notebooks as web pages under `site/notebooks/` with back bar and noindex tag | M5 | P2 | Open |
 | E-021 | Change the portfolio card status from "In progress" once real results replace the sample data | M3 | P2 | Open |
 | E-018 | Live "run more generations" demo on the VPS | M7 | P3 | Open |
-| E-026 | Presentation: outline and slide content from the finished notebooks and site | M8 | P3 | Open |
-| E-027 | Presentation as an HTML page under `site/presentation/` with the back bar and noindex tag | M8 | P3 | Open |
-| E-028 | Presentation as a PowerPoint (.pptx) file and a PNG of each slide | M8 | P3 | Open |
-| E-029 | Link the presentation from the project site | M8 | P3 | Open |
+| E-026 | Presentation: fill `docs/PRESENTATION_PLAN.md`'s notebook 02 to 04 slides from the finished notebooks (plan written 2026-11-20) | M8 | P3 | Open |
+| E-030 | Every notebook saves the charts the deck uses as PNG files, so slides show the exact notebook figures | M8 | P2 | Open |
+| E-027 | Presentation as one self-contained HTML file in `site/presentation/` (works offline), plus `cover.png` | M8 | P3 | Open |
+| E-028 | Presentation as PowerPoint (.pptx, with speaker notes), PDF, and a zip of every slide as PNG | M8 | P3 | Open |
+| E-029 | "The story, as a presentation" section on the overview page: thumbnail, view button, four downloads with sizes | M8 | P3 | Open |
 | E-019 | Host the Plotly script and fonts locally instead of from cdnjs and Google Fonts | — | P3 | Open |
 
 ## Enhancements: done
@@ -103,6 +104,7 @@ All done.
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | Full presentation plan written (`docs/PRESENTATION_PLAN.md`); added E-030. |
 | 2026-11-19 | Added E-026 to E-029 for the M8 presentation. |
 | 2026-11-16 | Notebook 01 done (E-024): M1 complete. B-006 and B-007 found and fixed. |
 | 2026-11-16 | First real run of notebook 01: baseline 77.18%. B-005 found and fixed. |

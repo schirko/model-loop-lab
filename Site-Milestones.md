@@ -122,19 +122,26 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 
 ### M8. Presentation
 
-**Why:** A short deck tells the whole story in a few minutes, for an interview, a meeting or an email. It is built last, from the finished notebooks and site, so every number in it is real.
+**Why:** A deck tells the whole story, notebook by notebook and step by step, in about 20 minutes, for an interview, a meeting or an email. It is built last, from the finished notebooks and site, so every number in it is real.
 
-**Plan (to match the Meat Price Explorer presentation):**
-- Slide content drawn from the four notebooks and the site: the question, the data, the baseline, the loop, the race, the collapse, what it all means
-- Three formats from one source: an HTML version on the project site, a PowerPoint (.pptx) file, and a PNG image of each slide
-- Linked from the project site, with the files kept inside `scott/model-loop-lab/`
+**The full slide-by-slide plan is in [`docs/PRESENTATION_PLAN.md`](docs/PRESENTATION_PLAN.md):** 30 slides plus a 4-slide appendix, a 12-minute core version, and for every slide its section label, headline, visual, callouts, source line and speaker notes. It is modeled on the Meat Price Explorer deck and the Life Expectancy Predictor's plain-English findings. Notebook 01's slides already carry its real numbers; notebooks 02 to 04's slides fill in as those notebooks are finished.
 
-**Done when:** all three formats are published and linked, and every figure in them matches the notebooks.
+**Files**, in `scott/model-loop-lab/presentation/`, matching `scott/meat-prices/presentation/`:
+- `model-loop-lab-story.html`: one self-contained web page that works offline
+- `model-loop-lab-story.pptx`: editable PowerPoint with speaker notes
+- `model-loop-lab-story.pdf`: for reading or printing
+- `model-loop-lab-story-slides.zip`: every slide as a PNG
+- `cover.png`: the cover slide, used as the thumbnail
+
+A "The story, as a presentation" section on the project's overview page shows the cover thumbnail and slide count, a "View the presentation" button, and download links for PDF, PowerPoint, HTML and slide images, each with its size.
+
+**Done when:** all five files are published and linked, no placeholders remain, and every number matches its notebook step.
 
 ## Change history
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | M8 plan rewritten as a full slide-by-slide presentation plan, `docs/PRESENTATION_PLAN.md`, walking through every notebook and step. |
 | 2026-11-19 | Added M8: a presentation in HTML, PowerPoint and PNG, built after all other milestones. |
 | 2026-11-16 | M1 done. Baseline 77.2% (default decision tree, 100% on training plots). Weakest: Aspen 44%, Douglas-fir 52%. |
 | 2026-11-16 | E-023 done: baseline saved for the site. Only E-024 (real run) left in M1. |

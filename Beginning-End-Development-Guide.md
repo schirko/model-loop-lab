@@ -51,7 +51,7 @@ Follow these in order. Each step says which milestone added it.
 
 ### Step 1. Create the project (M0)
 
-1. In PyCharm, create a new project at `B:\_Dev\Python\model-loop-lab` with a new `.venv` virtual environment.
+1. In PyCharm, create a new project at `B:\Development\Python\model-loop-lab` with a new `.venv` virtual environment.
 2. On GitHub, create the repository `schirko/model-loop-lab`.
 3. In the PyCharm terminal:
 
@@ -90,6 +90,8 @@ model-loop-lab/
 ├── .gitignore
 ├── pytest.ini
 ├── requirements.txt
+├── docs/
+│   └── PRESENTATION_PLAN.md       slide-by-slide plan for the M8 presentation
 ├── Site-Milestones.md
 ├── Enhancements-and-Bugs.md
 └── Beginning-End-Development-Guide.md
@@ -104,7 +106,7 @@ Always call this project's own Python by its path, `.venv\Scripts\python`. On th
 copy .env.example .env
 ```
 
-`.env` holds `SITE_DIR=B:\_Dev\Python\Schirko\scott\model-loop-lab`. The build script refuses any folder that does not end in `model-loop-lab`, so it can never clear the wrong folder.
+`.env` holds `SITE_DIR=B:\Development\Python\Schirko\scott\model-loop-lab`. The build script refuses any folder that does not end in `model-loop-lab`, so it can never clear the wrong folder.
 
 ### Step 4. Test, build and preview (M0)
 
@@ -116,13 +118,13 @@ copy .env.example .env
 To preview, serve the Schirko folder so the `/scott/...` paths resolve, then open http://localhost:8000/scott/model-loop-lab/ in a browser:
 
 ```
-cd B:\_Dev\Python\Schirko
+cd B:\Development\Python\Schirko
 python -m http.server 8000
 ```
 
 ### Step 5. Commit and publish (M0, then after every item)
 
-Project repo, from `B:\_Dev\Python\model-loop-lab`:
+Project repo, from `B:\Development\Python\model-loop-lab`:
 
 ```
 git add .
@@ -130,7 +132,7 @@ git commit -m "Describe the change"
 git push -u origin master
 ```
 
-Portfolio repo, from `B:\_Dev\Python\Schirko`, then redeploy in Coolify:
+Portfolio repo, from `B:\Development\Python\Schirko`, then redeploy in Coolify:
 
 ```
 git add scott
@@ -189,6 +191,18 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-20: Presentation plan
+
+**Added:** `docs/PRESENTATION_PLAN.md`, the slide-by-slide plan for the Milestone 8 deck: 30 slides plus a 4-slide appendix, walking through every notebook and its steps. Each slide has a section label (notebook and step), a one-sentence headline, a visual, up to three callouts, a source line and full speaker notes. Modeled on the Meat Price Explorer deck (`meat-prices/docs/PRESENTATION_PLAN.md`, `scott/meat-prices/presentation/`) and the Life Expectancy Predictor's plain-English findings and word list. Notebook 01's slides use its real numbers; later slides are marked with placeholders to fill from their notebooks.
+**Added:** E-030, every notebook saves the charts the deck needs as PNG files.
+
+### 2026-11-19: Projects folder moved to `B:\Development\Python`
+
+**Changed:** the projects folder moved from `B:\_Dev\Python` to `B:\Development\Python`. Updated every path: `.env.example` and `.env` (`SITE_DIR=B:\Development\Python\Schirko\scott\model-loop-lab`), this guide, Site-Milestones.md, and the example path in `tests/test_build_site.py`. The code itself uses no fixed paths, so nothing else needed changing.
+**Added:** Milestone 8, a presentation in HTML, PowerPoint and PNG, built after all other milestones (E-026 to E-029).
+
+**PyCharm:** the moved project's `.venv` may still point at the old folder. If `.venv\Scripts\python` fails, rebuild it: delete `.venv`, create a new one in PyCharm, then reinstall with `.venv\Scripts\python -m pip install -r requirements.txt`.
 
 ### 2026-11-16: M1 complete (E-024)
 
