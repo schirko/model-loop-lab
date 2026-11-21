@@ -258,7 +258,8 @@ The table says how often each type is missed but not what it gets mistaken for. 
 Saved as `cover_type_recall.png`."""),
     code("""recall = report["recall"].sort_values()
 fig, ax = plt.subplots(figsize=(8, 4))
-colors = [AMBER if v < baseline else SPRUCE for v in recall.values]
+weak = baseline - 0.05   # more than 5 points below the overall score
+colors = [AMBER if v < weak else SPRUCE for v in recall.values]
 ax.barh(recall.index, recall.values, color=colors)
 ax.axvline(baseline, color=GRAY, linestyle="--", linewidth=1.5)
 ax.text(baseline, len(recall) - 0.4, f" overall {baseline:.1%}", color=GRAY, va="bottom")
@@ -271,7 +272,7 @@ ax.set_title("Aspen and Douglas-fir are the baseline's weak spots", loc="left")
 save_web_chart(fig, "cover_type_recall")
 plt.show()"""),
     md("""### How to read it
-One bar per cover type, weakest at the bottom. The dashed line is the overall accuracy. Amber bars fall below it; green bars are at or above it."""),
+One bar per cover type, weakest at the bottom. The dashed line is the overall accuracy. Amber bars are more than 5 points below it, the cover types the baseline clearly struggles with; green bars are within 5 points of it or above."""),
 
     md("""## Step 9. What gets confused with what?
 
@@ -330,7 +331,7 @@ plt.show()"""),
 One row per cover type, lowest-growing at the bottom. Each box covers the middle half of that cover type's plots, the white line is the middle (median) plot, and the gray lines reach out to the typical lowest and highest plots.
 
 ### What it means
-The cover types form a ladder up the mountain: Cottonwood/willow, Ponderosa pine and Douglas-fir at the bottom, Lodgepole pine and Aspen in the middle, Spruce/fir above them, Krummholz at treeline. Where boxes overlap, elevation alone can't tell the trees apart, and those are the same pairs the confusion chart showed being mixed up. Krummholz overlaps only with Spruce/fir, which is why it has a single look-alike.
+The cover types form a ladder up the mountain: Cottonwood/willow, Ponderosa pine and Douglas-fir at the bottom, Lodgepole pine and Aspen in the middle, Spruce/fir above them, Krummholz at treeline. Where boxes overlap, elevation alone can't tell the trees apart, and those are the same pairs the confusion chart showed being mixed up. Krummholz overlaps mainly with Spruce/fir, just below it on the mountain, which is why it has essentially one look-alike.
 
 ### What's next and why
 The baseline and its weaknesses are now clear. The last step saves the baseline where the website can read it."""),

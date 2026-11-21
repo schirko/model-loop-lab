@@ -77,12 +77,15 @@ model-loop-lab/
 │   └── data/*.json               chart data: sample until real results replace it
 ├── scripts/build_site.py         publishes site/ into the portfolio folder
 ├── scripts/make_nb_01.py         regenerates notebook 01 from code
+├── scripts/make_nb_02.py         regenerates notebook 02 from code
 ├── tests/                        pytest tests
 ├── notebooks/                    the four project notebooks
-│   └── 01_data_and_baseline.ipynb  data, sample, split, scoring, baseline (M1)
+│   ├── 01_data_and_baseline.ipynb  data, sample, split, scoring, baseline (M1)
+│   └── 02_evolution_loop.ipynb     the evolution loop (M2)
 ├── src/                          shared Python code
 │   ├── __init__.py               makes src importable (from src.evaluate import ...)
 │   ├── evaluate.py               data loading, sample, split and scoring (M1)
+│   ├── evolve.py                 the evolution loop (M2)
 │   └── web_results.py            save_web_result(): notebooks save results for the site
 ├── results/web/                  real results written by notebooks: *.json data, images/*.png charts
 ├── data/                         downloaded data, not committed
@@ -168,6 +171,8 @@ It never writes `scott\index.html` or `scott\styles.css`; the portfolio project 
 
 **The presentation.** `presentation/build_deck.js` builds the deck as a native PowerPoint (editable text and charts, speaker notes on every slide) following `docs/PRESENTATION_PLAN.md`. `presentation/make_formats.py` turns that one file into everything published in `site/presentation/`: the `.pptx`, a PDF, every slide as a PNG (zipped), a single-file web page with slide controls and speaker notes that works offline, `cover.png`, and `deck.json` (slide count and file sizes). The overview's "The story, as a presentation" section links them, and a test checks its slide count and sizes against `deck.json`. Rebuilding needs Node with `pptxgenjs`, LibreOffice and Poppler, so Claude rebuilds it as each notebook's slides are added; the published files are committed with the site.
 
+**The evolution loop (`src/evolve.py`).** A model's settings are five "genes": model type (decision tree, random forest, extra trees), number of trees, maximum depth, minimum leaf size and feature share, 5,670 combinations in all (`SEARCH_SPACE`). Generation 1 is ten random settings. Each generation every model is scored with `evaluate()`, the best three survive unchanged, and seven children are made by `mutate()`, which moves one setting one step to a neighboring value (or switches the model type). Scores are cached by settings, so survivors are never retrained and the best score can never fall; 20 generations train at most 143 models. `generation_summary()` gives best, median and worst per generation, and `to_web()` writes the site's `evolution.json`. One seed (42) makes the whole run repeatable.
+
 **Charts.** Notebooks save charts with `save_web_chart(fig, name)` from `src/web_results.py` (150 dpi PNG, white background, site colors `SPRUCE`, `GRAY`, `AMBER`). The overview, the findings and the presentation all use these same files.
 
 **Pages.** Plain HTML in `site/`. Every page carries, as the portfolio requires: the noindex meta tag, `/scott/backbar.css`, the four favicon links, and the `sx-backbar` block as the first thing in `<body>` with the crumb "Model Loop Lab". All links use absolute `/scott/` paths.
@@ -209,6 +214,16 @@ One seed (42) drives every random step, so rerunning a notebook gives the same n
 ## Part 4. Development log
 
 Newest first. Every addition, removal or change goes here.
+
+### 2026-11-20: E-009 evolution loop; notebook 02 Steps 1–4
+
+**Added:** `src/evolve.py` (see Part 3), `tests/test_evolve.py` (12 tests: settings stay in range, a mutation changes one setting by one step, each model type builds correctly, one log row per model per generation, the best score never falls, survivors aren't retrained, same seed gives the same run, a real run on a small dataset, the site format), `scripts/make_nb_02.py` and `notebooks/02_evolution_loop.ipynb` Steps 1–4 (setup and baseline, the five settings, how a child is made, generation 1 scored and charted as `generation_1.png`).
+**Changed:** notebook 01's recall chart marks amber only for cover types more than 5 points below the overall score (Krummholz 76.8% and Spruce/fir 76.6% sit within half a point of 77.2%, and the deck already showed them green). The overview caption and deck source line match. Notebook 01's elevation note now says Krummholz overlaps *mainly* with Spruce/fir (its range touches Lodgepole pine's upper edge). The presentation plan now says at most 143 models are trained, not about 200.
+
+**Decisions**
+- Five settings, including feature share: the four in the plan plus `max_features`, which makes the trees in a forest differ and is one of the settings that matters most for random forests.
+- Survivors are never retrained (scores cached by settings): saves time, and guarantees the best score never falls, so any rise in the chart is the loop's doing.
+- Generation 1 is shown on its own, as a dot chart: bars on an axis that doesn't start at zero would exaggerate the gaps.
 
 ### 2026-11-20: Presentation part 1 published
 

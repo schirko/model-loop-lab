@@ -89,7 +89,7 @@
       </figure>
       <figure class="mll-figure">
         <img src="/scott/model-loop-lab/images/cover_type_recall.png" alt="Horizontal bar chart of the share of each cover type the plain tree found, from Lodgepole pine at 80% down to Aspen at 44%." onerror="this.closest('figure').hidden=true">
-        <figcaption>The share of each cover type the plain tree found. Amber bars fall below its overall 77.2%.</figcaption>
+        <figcaption>The share of each cover type the plain tree found. Amber bars are more than 5 points below its overall 77.2%.</figcaption>
       </figure>
       <figure class="mll-figure">
         <img src="/scott/model-loop-lab/images/elevation_by_type.png" alt="Box plot of elevation for each cover type, forming a ladder from Cottonwood/willow at the lowest elevations to Krummholz at treeline, with neighboring types overlapping." onerror="this.closest('figure').hidden=true">
@@ -150,7 +150,7 @@
       <li><strong>Sampled and split</strong> it fairly: 20,000 plots drawn so every cover type keeps its exact share, then 15,000 for training and 5,000 held out, with no plot on both sides. One random seed (42) drives every step, so every result repeats exactly.</li>
       <li><strong>Scored</strong> every model the same way, through one shared function: train a fresh copy, then measure accuracy on the same 5,000 held-out plots.</li>
       <li><strong>Measured the baseline:</strong> a plain decision tree, against guessing and against its own training plots, broken down by cover type and by which cover types get confused.</li>
-      <li><strong>Tested.</strong> 44 automated tests check the sampling, the split, the scoring, the files the site reads, that every page carries the portfolio's back bar and noindex tag, and that this page quotes the same baseline as the saved results. They run on every change.</li>
+      <li><strong>Tested.</strong> 56 automated tests check the sampling, the split, the scoring, the files the site reads, that every page carries the portfolio's back bar and noindex tag, and that this page quotes the same baseline as the saved results. They run on every change.</li>
       <li><strong>Published</strong> this site from the notebooks' saved results with one script, so every number and chart matches the latest run, and each finished notebook appears as a web page.</li>
     </ol>
     <p class="mll-note"><strong>Limits.</strong> One dataset, from one forest. Accuracy is a single overall score, so the rare cover types count for little in it; the per-cover-type results are there to show what it hides. The loops are small versions of the real thing, built to show the mechanism, not the scale of large AI systems.</p>

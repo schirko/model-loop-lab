@@ -264,7 +264,7 @@ pres.addSection({ title: "Notebook 01: Data and baseline" });
     ["44%", "of Aspen found: fewer than half"],
     ["77%", "of Krummholz found, though it's rare: rarity alone isn't the problem"],
   ]);
-  source(s, "Notebook 01, Step 8. Amber: below the overall 77.2%. Cottonwood/willow has only 23 held-out plots, so its rate is rough.");
+  source(s, "Notebook 01, Step 8. Amber: more than 5 points below the overall 77.2%. Cottonwood/willow has only 23 held-out plots, so its rate is rough.");
   s.addNotes("Breaking the score down by tree type, the common ones sit near 80%. Aspen is the weak spot: the tree finds fewer than half of the real Aspen plots. But rarity isn't the whole story. Krummholz is rare too, and the tree finds it just fine. The next slide shows why.");
 }
 

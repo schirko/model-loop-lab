@@ -40,7 +40,7 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 |---|---|---|---|
 | M0 | Project setup and front end | Done | E-001 to E-006 |
 | M1 | Notebook 01: data and baseline | Done (baseline 77.2%) | E-007, E-008, E-022 to E-024 |
-| M2 | Notebook 02: the evolution loop | Next | E-009, E-010, E-025 |
+| M2 | Notebook 02: the evolution loop | In progress (E-009 done) | E-009, E-010, E-025 |
 | M3 | Notebook 03: racing Optuna and random guessing | Planned | E-011, E-012, E-021 |
 | M4 | Notebook 04: model collapse | Planned | E-013, E-014 |
 | M5 | Notebooks published as site pages | Done early: every run notebook is published by the build (E-015) | E-015 |
@@ -80,7 +80,7 @@ The four notebooks are the heart of the project. Each milestone from M1 to M4 de
 **Why:** This is the core claim: a program improves models without a person choosing settings.
 
 **Plan:**
-- `src/evolve.py`: population of 10, keep top 3, mutate, 20 generations, fixed seed
+- `src/evolve.py`: population of 10, keep top 3, mutate, 20 generations, fixed seed (E-009, done)
 - `02_evolution_loop.ipynb` runs it and logs every model tried
 - Write `results/web/evolution.json` with `"sample": false` so the site switches to real data
 
@@ -143,6 +143,7 @@ A "The story, as a presentation" section on the project's overview page shows th
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | M2 started: the evolution loop (`src/evolve.py`) and notebook 02 Steps 1–4 (E-009). |
 | 2026-11-20 | Presentation part 1 published (13 slides, all formats) and linked from the overview; the deck now grows with each notebook instead of waiting for M8. |
 | 2026-11-20 | Overview page rebuilt to walk through the notebooks with real results only; notebooks and findings now published as web pages, so M5 is done early. |
 | 2026-11-20 | M8 plan rewritten as a full slide-by-slide presentation plan, `docs/PRESENTATION_PLAN.md`, walking through every notebook and step. |

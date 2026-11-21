@@ -15,7 +15,7 @@ The working list for this project, maintained by Claude.
 | # | Notebook | What it answers | Milestone | Status |
 |---|---|---|---|---|
 | 01 | `01_data_and_baseline.ipynb` | What does the data look like, and how good is a plain model? | M1 | Done: baseline 77.2% |
-| 02 | `02_evolution_loop.ipynb` | Can a program find better models on its own? | M2 | Next |
+| 02 | `02_evolution_loop.ipynb` | Can a program find better models on its own? | M2 | In progress: Steps 1–4 written |
 | 03 | `03_search_race.ipynb` | Does the loop beat Optuna and random guessing? | M3 | Planned |
 | 04 | `04_model_collapse.ipynb` | What happens when models learn only from other models? | M4 | Planned |
 
@@ -49,9 +49,8 @@ All done.
 
 | ID | Enhancement | Priority | Status |
 |---|---|---|---|
-| E-009 | `src/evolve.py`: population of 10, keep top 3, mutate, 20 generations, with pytest tests | P2 | Open |
-| E-010 | Run the loop in notebook 02 and write `results/web/evolution.json` | P2 | Open |
-| E-025 | Generation chart and table in notebook 02, with the four reading notes | P2 | Open |
+| E-010 | Notebook 02: run all 20 generations, write `results/web/evolution.json`, and write the "What it means" notes from the real run (Steps 4 onward) | P1 | Open |
+| E-025 | Notebook 02 charts (best and median per generation, winning settings, winner vs baseline by cover type, training vs held-out gap); add the feature-share column to the site's generation table | P2 | Open |
 
 ### Notebook 03: Search race
 
@@ -89,6 +88,7 @@ All done.
 | E-006 | First commit and push of the project repo (`master` branch, `.idea` untracked) | Project | 2026-11-15 |
 | E-016 | Portfolio screenshot `model-loop-lab.png` (made by the portfolio session) | Site | 2026-11-15 |
 | E-017 | Portfolio card added, status "In progress" (made by the portfolio session) | Site | 2026-11-15 |
+| E-009 | `src/evolve.py`: five settings (model type, trees, depth, leaf size, feature share; 5,670 combinations), mutation by one small step, population 10, keep 3, survivors never retrained, `to_web()` for the site; 12 pytest tests. Notebook 02 Steps 1–4: setup, the settings, how a child is made, generation 1 scored with a dot chart | Notebook 02 | 2026-11-20 |
 | E-027 | Presentation part 1 (13 slides: opening and every step of notebook 01) built as native PowerPoint with speaker notes (`presentation/build_deck.js`) | Presentation | 2026-11-20 |
 | E-028 | PDF, slide PNGs (zipped), one-file offline web page with speaker notes, and cover, all made from the one PowerPoint (`presentation/make_formats.py`), published in `site/presentation/` | Presentation | 2026-11-20 |
 | E-029 | "The story, as a presentation" section on the overview: cover thumbnail with slide count, View button, four downloads with sizes; a test checks they match the deck | Site | 2026-11-20 |
@@ -107,6 +107,7 @@ All done.
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | E-009 done: evolution loop code and notebook 02 Steps 1–4. Recall chart now marks amber only for cover types more than 5 points below the overall score, matching the deck. Tests now 56. |
 | 2026-11-20 | Presentation part 1 published in all formats and linked from the overview (E-027 to E-029). The deck now grows with each notebook (E-026). Tests now 44. |
 | 2026-11-20 | Overview rebuilt (E-031), notebooks and findings published as web pages (E-015, E-032), notebook 01 charts (E-033). E-015 moved forward from M5. Tests now 41. |
 | 2026-11-20 | Full presentation plan written (`docs/PRESENTATION_PLAN.md`); added E-030. |

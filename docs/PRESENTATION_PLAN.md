@@ -195,14 +195,14 @@ Every slide follows the meat-prices pattern, so the audience always knows where 
 - **Callouts:**
   - **10** / models per generation
   - **3** / survivors that become the parents of the next generation
-  - **20** / generations, about 200 models in all
+  - **20** / generations; survivors are never retrained, so at most 143 models are trained in all
 - **Source line:** notebook 02 **[step]**; `src/evolve.py`.
 - **Say:** "This is evolution in miniature. Each round, ten models compete. The best three survive and become the parents of the next round, with small random changes, like mutations. Nobody chooses the settings. The only thing guiding the loop is the score on real held-out plots."
 
 ### 15. What the loop is allowed to change
 - **Section label:** NOTEBOOK 02 · STEP [n]
-- **Headline:** The loop tunes four settings, and can swap one kind of model for another.
-- **Visual:** a table of the settings the loop can change, each with its range and a plain-English meaning, taken from the finished notebook. Expected rows: model type (single decision tree, random forest, extra trees), number of trees, maximum depth (how many questions a tree may ask), minimum leaf size (how many plots a final answer must cover).
+- **Headline:** The loop tunes five settings, including which kind of model to use.
+- **Visual:** the table from notebook 02, Step 2: model type (decision tree, random forest, extra trees), number of trees (25 to 300), maximum depth (6 to 40, or no limit), minimum leaf size (1 to 12), and feature share (the share of the 54 features each question may use). 5,670 combinations in all.
 - **Say:** "These are the dials the loop can turn. Two of them, maximum depth and minimum leaf size, directly limit memorizing: they stop a tree from building a final answer for a single plot. The model type matters too. A random forest averages many trees, which smooths out the quirks any single tree memorizes."
 
 ### 16. Generation 1: where the loop starts **[NB02]**
